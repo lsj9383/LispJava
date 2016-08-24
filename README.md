@@ -8,3 +8,6 @@
 ##一、快速使用
 ##二、表达式
 ##三、eval-apply基本循环的实现
+<p align="center">
+  <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/eval-apply.png?raw=true" alt="SICP"/>
+</p>
