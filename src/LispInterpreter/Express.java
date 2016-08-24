@@ -17,25 +17,37 @@ enum ExpressType{
 	APPLICATION}
 
 public class Express {
-	ArrayList<String> subexps = new ArrayList<String>();
-	ExpressType type = ExpressType.NULL;
+	private ArrayList<String> subexps = new ArrayList<String>();
+	private ExpressType type = ExpressType.NULL;
 	
+	@Override
+	public String toString(){
+		String s = "";
+		s += type + "\n";
+		s += subexps;
+		return s;
+	}
 	public Express(String s){
 		Split(s);		//将s按规则分割, 每一个子表达式都添加到datas中
 		UpdateType();	//根据得到的表达式设置该表达式类型
 		//check
-		System.out.println(type);
-		System.out.println(subexps);
+//		System.out.println(type);
+//		System.out.println(subexps);
 	}
+	public ArrayList<String> GetSubExps(){
+		return subexps;
+	}
+	
+	public ExpressType Type(){
+		return type;
+	}
+	
 	private void UpdateType(){
 		String sub = subexps.get(0);
-
+		
 		if(subexps.size()==1){
 			if(sub.charAt(0)=='\"'){
 				type = ExpressType.STRING;
-			}
-			else if(sub.charAt(0)=='('){
-				type = ExpressType.APPLICATION;
 			}
 			else if(sub.matches(("\\d+\\.{0,1}\\d*"))){
 				type = ExpressType.NUMBER;
@@ -45,32 +57,30 @@ public class Express {
 			}
 		}
 		else{
-			switch(sub.substring(1))
-			{
-			case "quoted":
+			String FirstWord = subexps.get(1);
+			if(FirstWord.equals("quoted")){
 				type=ExpressType.QUOTED;
-				break;
-			case "set!":
+			}
+			else if(FirstWord.equals("set!")){
 				type=ExpressType.ASSIGNMENT;
-				break;
-			case "define":
+			}
+			else if(FirstWord.equals("define")){
 				type=ExpressType.DEFINITION;
-				break;
-			case "if":
+			}
+			else if(FirstWord.equals("if")){
 				type=ExpressType.IF;
-				break;
-			case "lambda":
+			}
+			else if(FirstWord.equals("lambda")){
 				type=ExpressType.LAMBDA;
-				break;
-			case "begin":
+			}
+			else if(FirstWord.equals("begin")){
 				type=ExpressType.BEGIN;
-				break;
-			case "cond":
+			}
+			else if(FirstWord.equals("cond")){
 				type=ExpressType.COND;
-				break;
-			default:
+			}
+			else{
 				type=ExpressType.APPLICATION;
-				break;
 			}
 		}
 	}
@@ -79,6 +89,7 @@ public class Express {
 		Scanner stdin;
 		if(s.charAt(0)=='(' && s.charAt(s.length()-1)==')'){
 			stdin = new Scanner(s.substring(1, s.length()-1));
+			subexps.add("(");
 		}
 		else{
 			stdin = new Scanner(s);
@@ -97,8 +108,7 @@ public class Express {
 		}
 		
 		if(s.charAt(0)=='(' && s.charAt(s.length()-1)==')'){
-			subexps.set(0, "("+subexps.get(0));
-			subexps.set(subexps.size()-1, subexps.get(subexps.size()-1)+")");
+			subexps.add(")");
 		}
 	}
 	
