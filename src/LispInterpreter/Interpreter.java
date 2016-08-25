@@ -1,93 +1,18 @@
 package LispInterpreter;
 
+import java.io.*;
 import java.util.*;
 
 public class Interpreter {
 	private static String[] PrimitiveVars = {"=", "<", ">", "+", "-", "*", "/"};
 	private static Data[]   PrimitiveVals = {
-					Equ.Single(),
-					Less.Single(),
-					Great.Single(),
-					Add.Single(), 
-					Sub.Single(), 
-					Mul.Single(), 
-					Div.Single()};
-
-	public static void DriverLoopTest(){
-		Frame InitialFrame = 
-				new Frame(	new ArrayList<String>(Arrays.asList(PrimitiveVars)),
-							new ArrayList<Data>(Arrays.asList(PrimitiveVals)));
-		
-		Environment global_env =new Environment(InitialFrame, null);
-		System.out.println(global_env);
-		Data result = Eval(new Express("2"), global_env);
-		Show(result);
-		result = Eval(new Express("+"), global_env);
-		Show(result);
-		result = Eval(new Express("(+ 10 3)"), global_env);
-		Show(result);
-		result = Eval(new Express("(+ (- 1 20 4) 10 2 3)"), global_env);
-		Show(result);
-		result = Eval(new Express("(* (- 1 20 4) 10 2 3)"), global_env);
-		Show(result);
-		result = Eval(new Express("(/ (- 1 20 4) 10 2 3)"), global_env);
-		Show(result);
-		result = Eval(new Express("((lambda (x) (+ x 1)) 3)"), global_env);
-		Show(result);
-		result = Eval(new Express("((lambda (x y z) (* x y (+ x z))) 1 2 3)"), global_env);
-		Show(result);
-		
-		result = Eval(new Express("(define a 3)"), global_env);
-		Show(result);
-		result = Eval(new Express("(define b (* 3 (+ 2 2) 0.5))"), global_env);
-		Show(result);
-		result = Eval(new Express("a"), global_env);
-		Show(result);
-		result = Eval(new Express("b"), global_env);
-		Show(result);
-		result = Eval(new Express("(+ a b)"), global_env);
-		Show(result);
-		result = Eval(new Express("(define (fun a b) (+ a b))"), global_env);
-		Show(result);
-		result = Eval(new Express("(fun 4 3)"), global_env);
-		Show(result);
-		
-		result = Eval(new Express("(= 1 2)"), global_env);
-		Show(result);
-		result = Eval(new Express("(= 1 1 1 1)"), global_env);
-		Show(result);
-		result = Eval(new Express("(if (= 3 3) (+ 2 3) (- 2 3))"), global_env);
-		Show(result);
-		result = Eval(new Express("(< 10 8)"), global_env);
-		Show(result);
-		result = Eval(new Express("(< 7 8 9)"), global_env);
-		Show(result);
-		result = Eval(new Express("(> 10 8)"), global_env);
-		Show(result);
-		result = Eval(new Express("(> 7 8 9)"), global_env);
-		Show(result);
-		
-		result = Eval(new Express("(define (abs x) (if (< x 0) (- 0 x) x))"), global_env);
-		Show(result);
-		result = Eval(new Express("(abs 10)"), global_env);
-		Show(result);
-		result = Eval(new Express("(abs 10)"), global_env);
-		Show(result);
-		result = Eval(new Express("(define one_num 10)"), global_env);
-		Show(result);
-		result = Eval(new Express("(set! one_num 20)"), global_env);
-		Show(result);
-		result = Eval(new Express("(+ 1 one_num)"), global_env);
-		Show(result);
-		result = Eval(new Express("(define withdraw ((lambda (balance) (lambda (x) (set! balance (- balance x)) balance)) 100))"), global_env);
-		Show(result);
-		result = Eval(new Express("(withdraw 10)"), global_env);
-		Show(result);
-		result = Eval(new Express("(withdraw 10)"), global_env);
-		Show(result);
-		result = Eval(new Express("(withdraw 30)"), global_env);
-		Show(result);
-	}
+									Equ.Single(),
+									Less.Single(),
+									Great.Single(),
+									Add.Single(), 
+									Sub.Single(), 
+									Mul.Single(), 
+									Div.Single()};
 	
 	/* 求值循环 */
 	public static void DriverLoop(){
@@ -96,7 +21,8 @@ public class Interpreter {
 							new ArrayList<Data>(Arrays.asList(PrimitiveVals)));
 		
 		Environment global_env =new Environment(InitialFrame, null);
-		System.out.println("Welcome come to Scheme!");
+		
+		Display.Welcome();
 		while(true){
 			Scanner stdin = new Scanner(System.in);
 			String sExp = null;
@@ -107,11 +33,17 @@ public class Interpreter {
 			}while(sExp.equals(""));
 			
 			/*求值，并显示*/
-			Show(Eval(new Express(sExp), global_env));
+			Display.Show(Eval(new Express(sExp), global_env));
 			System.out.println("");
 		}
 	}
-	
+	/*************************************************************************************/
+	/*************************************************************************************/
+	/*************************************************************************************/
+	/*****************************eval-apply基本循环***************************************/
+	/*************************************************************************************/
+	/*************************************************************************************/
+	/*************************************************************************************/
 	static Data Eval(Express exp, Environment env){
 		switch(exp.Type()){
 		case NUMBER:		return new Data(Double.valueOf(exp.GetSubExps().get(0)));
@@ -119,6 +51,8 @@ public class Interpreter {
 		case ASSIGNMENT:	EvalAssignment(exp, env);		return null;	/* operation without data */
 		case DEFINITION:	EvalDefinition(exp, env);		return null;	/* operation without data */
 		case IF:			return EvalIf(exp, env);
+		case OR:			return EvalOr(exp, env);
+		case AND:			return EvalAnd(exp, env);
 		case LAMBDA:		return new Procedure(Lambda.Variables(exp), Lambda.Body(exp), env );
 		case APPLICATION:	return Apply(Eval(operator(exp), env), ListOfValues(operands(exp), env));
 		default:			return null;
@@ -143,43 +77,9 @@ public class Interpreter {
 		}
 	}
 	
-	static void Show(Data data){
-		String s = new String();
-		
-		s = "output value : ";
-		if(data == null){
-			s += "OK\n";
-		}
-		else{
-			if(data.Type() == DataType.NUMBER){
-				s += data.GetNumber() + "\n";
-			}
-			else if(data.Type() == DataType.STRING){
-				s += data.GetNumber() + "\n";
-			}
-			else if(data.Type() == DataType.SYMBOL){
-				s += data.GetNumber() + "\n";
-			}
-			else if(data.Type() == DataType.BOOLEAN){
-				s += "#"+data.GetBoolean() + "\n";
-			}
-			else if(data.Type() == DataType.PROCEDURE){
-				s += "PROCEDURE\n";
-			}
-			else if(data.Type() == DataType.PRIMITIVE){
-				s += "PROCEDURE\n";
-			}
-			else if(data.Type() == DataType.NULL){
-				s += "error : Show , data display NULL\n";
-			}
-			else{
-				s += "error : Show , data isn't data...\n";
-			}
-		}
-		
-		System.out.print(s);
-	}
-	
+	/*************************************************************************************/
+	/*************************************************************************************/
+	/*************************************************************************************/
 	/*取出复合过程的操作符*/
 	static Express operator(Express exp){
 		return new Express( exp.GetSubExps().get(1) );
@@ -242,5 +142,43 @@ public class Interpreter {
 			System.exit(0);
 			return null;
 		}
+	}
+	
+	/* 对OR表达式求值  */
+	static Data EvalOr(Express exp, Environment env){
+		for(int i=2; i<exp.GetSubExps().size()-1; i++){
+			Data pred = Eval(new Express((exp.GetSubExps().get(i))), env);
+			if(pred.Type()!=DataType.BOOLEAN){
+				System.out.println("error : EvalOr , exps contain not true or false");
+				System.exit(0);
+				return null;
+			}
+			else{
+				if( pred.GetBoolean() ){
+					return new Data(true);
+				}
+			}
+		}
+		
+		return new Data(false);
+	}
+	
+	/* 对AND表达式求值  */
+	static Data EvalAnd(Express exp, Environment env){
+		for(int i=2; i<exp.GetSubExps().size()-1; i++){
+			Data pred = Eval(new Express((exp.GetSubExps().get(i))), env);
+			if(pred.Type()!=DataType.BOOLEAN){
+				System.out.println("error : EvalOr , exps contain not true or false");
+				System.exit(0);
+				return null;
+			}
+			else{
+				if( !pred.GetBoolean() ){
+					return new Data(false);
+				}
+			}
+		}
+		
+		return new Data(true);
 	}
 }

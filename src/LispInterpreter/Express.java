@@ -11,9 +11,11 @@ enum ExpressType{
 	ASSIGNMENT,
 	DEFINITION,
 	IF,
+	COND,
+	OR,
+	AND,
 	LAMBDA,
 	BEGIN,
-	COND,
 	APPLICATION}
 
 public class Express {
@@ -30,9 +32,6 @@ public class Express {
 	public Express(String s){
 		Split(s);		//将s按规则分割, 每一个子表达式都添加到datas中
 		UpdateType();	//根据得到的表达式设置该表达式类型
-		//check
-//		System.out.println(type);
-//		System.out.println(subexps);
 	}
 	public ArrayList<String> GetSubExps(){
 		return subexps;
@@ -70,14 +69,20 @@ public class Express {
 			else if(FirstWord.equals("if")){
 				type=ExpressType.IF;
 			}
+			else if(FirstWord.equals("cond")){
+				type=ExpressType.COND;
+			}
+			else if(FirstWord.equals("or")){
+				type=ExpressType.OR;
+			}
+			else if(FirstWord.equals("and")){
+				type=ExpressType.AND;
+			}
 			else if(FirstWord.equals("lambda")){
 				type=ExpressType.LAMBDA;
 			}
 			else if(FirstWord.equals("begin")){
 				type=ExpressType.BEGIN;
-			}
-			else if(FirstWord.equals("cond")){
-				type=ExpressType.COND;
 			}
 			else{
 				type=ExpressType.APPLICATION;

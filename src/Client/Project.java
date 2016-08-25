@@ -17,15 +17,9 @@ public class Project {
 		System.out.println(new Express("-10"));
 		System.out.println(new Express("10"));
 		System.out.println(new Express("(set! a 3)"));
+		System.out.println(new Express("(or (= 3 4) (= 3 2) (= 3 1))"));
 	}
 	
-	static void TestEnvironment(){
-		Interpreter.DriverLoop();
-	}
-	
-	static void TestEval(){
-		Interpreter.DriverLoopTest();
-	}
 	
 	static void Run(){
 		Interpreter.DriverLoop();
@@ -33,8 +27,6 @@ public class Project {
 	
 	public static void main(String[] args){
 //		TestExpress();
-//		TestEnvironment();
-//		TestEval();
 		Run();
 		System.out.println("project done!");
 	}

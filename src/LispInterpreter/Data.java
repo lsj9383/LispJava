@@ -17,6 +17,35 @@ public class Data {
 	protected String context_symbol = null;
 	protected double context_number = 0;
 	
+	@Override
+	public String toString(){
+		String s = "";
+		switch(type){
+		case NULL:
+			s += "error : Data-toString , data display NULL";
+			break;
+		case NUMBER:
+			s+=context_number;
+			break;
+		case SYMBOL:
+		case STRING:
+			s+=context_symbol;
+			break;
+		case PROCEDURE:
+			s+="PROCEDURE";
+			break;
+		case PRIMITIVE:
+			s+="PRIMITIVE";
+			break;
+		case BOOLEAN:
+			s+=GetBoolean();
+			break;
+		default:
+			s += "error : Data-toString, data type is wrong";	
+		}
+		return s;
+	}
+	
 	public Data(){}
 	public Data(int context){
 		context_number = context;
