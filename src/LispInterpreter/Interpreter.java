@@ -34,20 +34,18 @@ public class Interpreter {
 	static Data Eval(Express exp, Environment env){
 		Data result = null;
 		
-		if(exp.Type() == ExpressType.NUMBER){
+		switch(exp.Type()){
+		case NUMBER:
 			return new Data(Double.valueOf(exp.GetSubExps().get(0)));
-		}
-		else if (exp.Type() == ExpressType.VARIABLE){
+		case VARIABLE:
 			return env.lookup_variable_value(exp.GetSubExps().get(0));
-		}
-		else if(exp.Type() == ExpressType.LAMBDA){
+		case LAMBDA:
 			return new Procedure( 	Lambda.Variables(exp),
 									Lambda.Body(exp),
-									env);
-		}
-		else if (exp.Type() == ExpressType.APPLICATION){
-			ArrayList<Data> vals = ListOfValues(operands( exp ),env);
-			return Apply(Eval( operator(exp), env), vals);
+									env );
+		case APPLICATION:
+			ArrayList<Data> vals = ListOfValues(operands(exp), env);
+			return Apply(Eval(operator(exp), env), vals);
 		}
 		
 		return result;
