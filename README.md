@@ -70,7 +70,7 @@ interface Primitive{
 	Data Call(ArrayList<Data> args);
 }
 
-class Opera extends Data implements{
+class Opera extends Data implements Primitive{
 	Opera obj = null;
 	
 	private Opera{}
