@@ -3,14 +3,16 @@ package LispInterpreter;
 import java.util.*;
 
 public class Interpreter {
-	private static String[] PrimitiveVars = {"=", "<", "+", "-", "*", "/"};
-	private static Data[] PrimitiveVals = {	Equ.Single(),
-											Less.Single(),
-											Add.Single(), 
-											Sub.Single(), 
-											Mul.Single(), 
-											Div.Single()};
-	
+	private static String[] PrimitiveVars = {"=", "<", ">", "+", "-", "*", "/"};
+	private static Data[]   PrimitiveVals = {
+					Equ.Single(),
+					Less.Single(),
+					Great.Single(),
+					Add.Single(), 
+					Sub.Single(), 
+					Mul.Single(), 
+					Div.Single()};
+
 	public static void DriverLoop(){
 		Frame InitialFrame = 
 				new Frame(	new ArrayList<String>(Arrays.asList(PrimitiveVars)),
@@ -60,6 +62,10 @@ public class Interpreter {
 		Show(result);
 		result = Eval(new Express("(< 7 8 9)"), global_env);
 		Show(result);
+		result = Eval(new Express("(> 10 8)"), global_env);
+		Show(result);
+		result = Eval(new Express("(> 7 8 9)"), global_env);
+		Show(result);
 		
 		result = Eval(new Express("(define (abs x) (if (< x 0) (- 0 x) x))"), global_env);
 		Show(result);
@@ -87,8 +93,8 @@ public class Interpreter {
 		switch(exp.Type()){
 		case NUMBER:		return new Data(Double.valueOf(exp.GetSubExps().get(0)));
 		case VARIABLE:		return env.lookup_variable_value(exp.GetSubExps().get(0));
-		case ASSIGNMENT:	EvalAssignment(exp, env);		return null;
-		case DEFINITION:	EvalDefinition(exp, env);		return null;
+		case ASSIGNMENT:	EvalAssignment(exp, env);		return null;	/* operation without data */
+		case DEFINITION:	EvalDefinition(exp, env);		return null;	/* operation without data */
 		case IF:			return EvalIf(exp, env);
 		case LAMBDA:		return new Procedure(Lambda.Variables(exp), Lambda.Body(exp), env );
 		case APPLICATION:	return Apply(Eval(operator(exp), env), ListOfValues(operands(exp), env));
