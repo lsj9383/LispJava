@@ -21,4 +21,20 @@ class Lambda {
 		}
 		return exps;
 	}
+	
+	static Express make(ArrayList<String> Vars, ArrayList<String> sExps){
+		String s = "(lambda (";
+		
+		for(int i=0; i<Vars.size(); i++){
+			s+=Vars.get(i)+" ";
+		}
+		s+=")";
+		
+		for(int i=0; i<sExps.size(); i++){
+			s+=" "+sExps.get(i);
+		}
+		
+		s+=")";
+		return new Express(s);
+	}
 }

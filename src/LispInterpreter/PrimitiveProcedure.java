@@ -4,6 +4,7 @@ import java.util.*;
 
 /* 
  * 基本过程:
+ * =,  equ
  * +,  add
  * -,  sub
  * *,  mul
@@ -12,6 +13,74 @@ import java.util.*;
  *  */
 interface Primitive{
 	Data Call(ArrayList<Data> args);
+}
+
+/* = */
+class Equ extends Data implements Primitive{
+	private static Equ obj = null;
+	
+	private Equ(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static Equ Single(){
+		if(obj == null){
+			obj = new Equ();
+			return obj;
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		for(int i=1; i<args.size(); i++){
+			if(args.get(i).Type() != DataType.NUMBER){
+				System.out.println("error : Equ Call , Data is not number");
+				System.exit(0);
+			}
+			else{
+				if(args.get(i).GetNumber()!=args.get(i-1).GetNumber()){
+					return new Data(false);
+				}
+			}
+		}
+		return new Data(true);
+	}
+}
+
+/* < */
+class Less extends Data implements Primitive{
+	private static Less obj = null;
+	
+	private Less(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static Less Single(){
+		if(obj == null){
+			obj = new Less();
+			return obj;
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		for(int i=1; i<args.size(); i++){
+			if(args.get(i).Type() != DataType.NUMBER){
+				System.out.println("error : Equ Call , Data is not number");
+				System.exit(0);
+			}
+			else{
+				if(args.get(i).GetNumber()<=args.get(i-1).GetNumber()){
+					return new Data(false);
+				}
+			}
+		}
+		return new Data(true);
+	}
 }
 
 /* + */

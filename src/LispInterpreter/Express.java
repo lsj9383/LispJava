@@ -49,7 +49,7 @@ public class Express {
 			if(sub.charAt(0)=='\"'){
 				type = ExpressType.STRING;
 			}
-			else if(sub.matches(("\\d+\\.{0,1}\\d*"))){
+			else if(sub.matches(("^[+-]?\\d+\\.{0,1}\\d*"))){
 				type = ExpressType.NUMBER;
 			}
 			else{

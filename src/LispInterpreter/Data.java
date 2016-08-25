@@ -7,6 +7,7 @@ enum DataType{
 	NUMBER,
 	STRING,
 	SYMBOL,
+	BOOLEAN,
 	PRIMITIVE,
 	PROCEDURE
 }
@@ -25,6 +26,11 @@ public class Data {
 	public Data(double context){
 		context_number = context;
 		type = DataType.NUMBER;
+	}
+	
+	public Data(boolean t){
+		context_number = t ? 1 : 0;
+		type = DataType.BOOLEAN;
 	}
 	
 	public Data(String context){
@@ -47,6 +53,10 @@ public class Data {
 	
 	public String GetSymbol(){
 		return this.context_symbol;
+	}
+	
+	public boolean GetBoolean(){
+		return (context_number != 0);
 	}
 	
 	
