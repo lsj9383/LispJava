@@ -24,13 +24,18 @@ public class Project {
 	}
 	
 	static void TestEval(){
+		Interpreter.DriverLoopTest();
+	}
+	
+	static void Run(){
 		Interpreter.DriverLoop();
 	}
 	
 	public static void main(String[] args){
 //		TestExpress();
 //		TestEnvironment();
-		TestEval();
+//		TestEval();
+		Run();
 		System.out.println("project done!");
 	}
 }

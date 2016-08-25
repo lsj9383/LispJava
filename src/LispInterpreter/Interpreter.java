@@ -13,7 +13,7 @@ public class Interpreter {
 					Mul.Single(), 
 					Div.Single()};
 
-	public static void DriverLoop(){
+	public static void DriverLoopTest(){
 		Frame InitialFrame = 
 				new Frame(	new ArrayList<String>(Arrays.asList(PrimitiveVars)),
 							new ArrayList<Data>(Arrays.asList(PrimitiveVals)));
@@ -87,6 +87,29 @@ public class Interpreter {
 		Show(result);
 		result = Eval(new Express("(withdraw 30)"), global_env);
 		Show(result);
+	}
+	
+	/* 求值循环 */
+	public static void DriverLoop(){
+		Frame InitialFrame = 
+				new Frame(	new ArrayList<String>(Arrays.asList(PrimitiveVars)),
+							new ArrayList<Data>(Arrays.asList(PrimitiveVals)));
+		
+		Environment global_env =new Environment(InitialFrame, null);
+		System.out.println("Welcome come to Scheme!");
+		while(true){
+			Scanner stdin = new Scanner(System.in);
+			String sExp = null;
+			/*1). 输入有效字串*/
+			do{
+				System.out.print("Eval Input : ");
+				sExp = stdin.nextLine();
+			}while(sExp.equals(""));
+			
+			/*求值，并显示*/
+			Show(Eval(new Express(sExp), global_env));
+			System.out.println("");
+		}
 	}
 	
 	static Data Eval(Express exp, Environment env){
