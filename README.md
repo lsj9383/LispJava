@@ -25,6 +25,8 @@ static Data Eval(Express exp, Environment env){
 	case ASSIGNMENT:	EvalAssignment(exp, env);		return null;	/* operation without data */
 	case DEFINITION:	EvalDefinition(exp, env);		return null;	/* operation without data */
 	case IF:			return EvalIf(exp, env);
+	case OR:			return EvalOr(exp, env);
+	case AND:			return EvalAnd(exp, env);
 	case LAMBDA:		return new Procedure(Lambda.Variables(exp), Lambda.Body(exp), env );
 	case APPLICATION:	return Apply(Eval(operator(exp), env), ListOfValues(operands(exp), env));
 	default:			return null;
