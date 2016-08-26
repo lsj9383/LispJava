@@ -8,11 +8,13 @@
 ##一、快速使用
 ##二、表达式
 ##三、树形求解
-Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
+Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。<br>
 例如:(* 2 (+ 3 4)) 可以表现为如下的`抽象语法树`
 <p align="left">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/se-tree.png?raw=true" alt="SICP"/>
 </p>
+这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
+对复合表达式的求值，就是对其中的子表达式进行求值，这样的一个递归过程，将会得到如此的树形结构。
 ##四、eval-apply基本循环的实现
 <p align="center">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/eval-apply.png?raw=true" alt="SICP"/>
