@@ -11,7 +11,7 @@
 Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
 例如:(* 2 (+ 3 4)) 可以表现为如下的`抽象语法树`
 <p align="left">
-  <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/es-tree.png?raw=true" alt="SICP"/>
+  <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/se-tree.png?raw=true" alt="SICP"/>
 </p>
 ##四、eval-apply基本循环的实现
 <p align="center">
