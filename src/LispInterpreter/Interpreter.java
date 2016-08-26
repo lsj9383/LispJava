@@ -5,12 +5,13 @@ import java.util.*;
 
 public class Interpreter {
 	private static String[] PrimitiveVars = 
-		{"=", "<", ">", "+", "-", "*", "/", "cons", "car", "cdr", "list", "null", "null?"};
+		{"=", "<", ">", "null?", "+", "-", "*", "/", "cons", "car", "cdr", "list", "null"};
 	
 	private static Data[]   PrimitiveVals = {
 									Equ.Single(),
 									Less.Single(),
 									Great.Single(),
+									isNull.Single(),
 									Add.Single(), 
 									Sub.Single(), 
 									Mul.Single(), 
@@ -19,8 +20,7 @@ public class Interpreter {
 									Car.Single(),
 									Cdr.Single(),
 									List.Single(),
-									null,				/*对null查字典，找到的Data就是null，因为null也是Data的一种...*/
-									isNull.Single()};
+									null};				/*对null查字典，找到的Data就是null，因为null也是Data的一种...*/
 	
 	/* 求值循环 */
 	public static void DriverLoop(){

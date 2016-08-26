@@ -7,7 +7,13 @@
 
 ##一、快速使用
 ##二、表达式
-##三、eval-apply基本循环的实现
+##三、树形求解
+Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
+例如:(* 2 (+ 3 4)) 可以表现为如下的`抽象语法树`
+<p align="left">
+  <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/es-tree.png?raw=true" alt="SICP"/>
+</p>
+##四、eval-apply基本循环的实现
 <p align="center">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/eval-apply.png?raw=true" alt="SICP"/>
 </p>
@@ -38,21 +44,18 @@ apply描述了一个过程如何作用。<br>
 1).对于基本过程，其实现方式已经由`元语言`在底层实现。<br>
 2).对于复合过程，其实现方式是将`<body>`提取出来，并根据输入参数创建新环境，再对这个`<body>`进行求值。`<body>`通常是一组表达式。
 ```java
-static Data Apply(Data procedure, ArrayList<Data> args){
-	if (procedure.Type() == DataType.PRIMITIVE){ /*基础过程*/
-		return ((Primitive)procedure).Call(args);
-	}
-	else if (procedure.Type() == DataType.PROCEDURE){
-		/* 在新环境下对procedure的body顺序求值 */
-		return EvalSequence(((Procedure)procedure).Body(),  
-							((Procedure)procedure).Env().extend_environment(
-									((Procedure)procedure).Variables(),
-									 args) );
-	}
-	else{
-		System.out.println("error : Apply , procedure is not PROCEDURE");
-		System.exit(0);
-		return null;
+static Data Eval(Express exp, Environment env){
+	switch(exp.Type()){
+	case NUMBER:		return EvalSelf(exp, env);
+	case VARIABLE:		return EvalVariable(exp, env);
+	case ASSIGNMENT:	return EvalAssignment(exp, env);	/* operation without data and return null*/
+	case DEFINITION:	return EvalDefinition(exp, env);	/* operation without data and return null*/
+	case IF:			return EvalIf(exp, env);
+	case OR:			return EvalOr(exp, env);
+	case AND:			return EvalAnd(exp, env);
+	case LAMBDA:		return EvalLambda(exp, env);
+	case APPLICATION:	return Apply(Eval(operator(exp), env), ListOfValues(operands(exp), env));
+	default:			return null;
 	}
 }
 ```
@@ -89,12 +92,17 @@ class Opera extends Data implements Primitive{
 }
 ```
 基本过程清单：<br>
-* = : Equ;		谓词，判断操作数是否相等.
-* < : Less;		谓词，判断操作数是否升序排列.
-* > : Great;	谓词，判断操作数是否降续排列.
-* + : Add;		操作，将所有操作数相加.
-* - : Sub;		操作，将第一个操作数减去其他的操作数.
-* * : Mul;		操作，将所有操作数相乘.
-* / : Div;		谓词，将第一个操作数除以其他的操作数.
+*   =   : Equ;		谓词，判断操作数是否相等.
+*   <   : Less;		谓词，判断操作数是否升序排列.
+*   >   : Great;	谓词，判断操作数是否降续排列.
+* null? : isNull;	谓词，判断操作数是否为null对象.
+*   +   : Add;		操作，将所有操作数相加.
+*   -   : Sub;		操作，将第一个操作数减去其他的操作数.
+*   *   : Mul;		操作，将所有操作数相乘.
+*   /   : Div;		操作，将第一个操作数除以其他的操作数.
+*  cons : Cons;		操作，将输入的两个参数组成一个序对.
+*  car  : Car;		操作，将输入的序对提取第一个数据对象
+*  cdr  : Cdr;		操作，将输入的序对提取第二个数据对象
+*  null : null;		数值, Data的object为null.
 
 ###五、数据类型
