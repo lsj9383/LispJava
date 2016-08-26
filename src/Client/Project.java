@@ -4,7 +4,6 @@ import LispInterpreter.*;
 
 public class Project {
 	static void TestExpress(){
-		Express exp = new Express("(* (+ 2 3) (- 3 4) (f))");
 		new Express("(f)");
 		new Express("(if (= a 0) (- 3 4) (f))");
 		new Express("\"3\"");

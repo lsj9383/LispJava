@@ -4,7 +4,9 @@ import java.io.*;
 import java.util.*;
 
 public class Interpreter {
-	private static String[] PrimitiveVars = {"=", "<", ">", "+", "-", "*", "/"};
+	private static String[] PrimitiveVars = 
+		{"=", "<", ">", "+", "-", "*", "/", "cons", "car", "cdr", "list", "null", "null?"};
+	
 	private static Data[]   PrimitiveVals = {
 									Equ.Single(),
 									Less.Single(),
@@ -12,7 +14,13 @@ public class Interpreter {
 									Add.Single(), 
 									Sub.Single(), 
 									Mul.Single(), 
-									Div.Single()};
+									Div.Single(),
+									Cons.Single(),
+									Car.Single(),
+									Cdr.Single(),
+									List.Single(),
+									null,
+									isNull.Single()};
 	
 	/* 求值循环 */
 	public static void DriverLoop(){
@@ -37,13 +45,7 @@ public class Interpreter {
 			System.out.println("");
 		}
 	}
-	/*************************************************************************************/
-	/*************************************************************************************/
-	/*************************************************************************************/
 	/*****************************eval-apply基本循环***************************************/
-	/*************************************************************************************/
-	/*************************************************************************************/
-	/*************************************************************************************/
 	static Data Eval(Express exp, Environment env){
 		switch(exp.Type()){
 		case NUMBER:		return new Data(Double.valueOf(exp.GetSubExps().get(0)));
@@ -76,10 +78,8 @@ public class Interpreter {
 			return null;
 		}
 	}
+	/*************************************************************************************/
 	
-	/*************************************************************************************/
-	/*************************************************************************************/
-	/*************************************************************************************/
 	/*取出复合过程的操作符*/
 	static Express operator(Express exp){
 		return new Express( exp.GetSubExps().get(1) );
@@ -178,7 +178,6 @@ public class Interpreter {
 				}
 			}
 		}
-		
 		return new Data(true);
 	}
 }

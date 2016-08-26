@@ -8,6 +8,7 @@ enum DataType{
 	STRING,
 	SYMBOL,
 	BOOLEAN,
+	CONS,
 	PRIMITIVE,
 	PROCEDURE
 }
@@ -16,6 +17,8 @@ public class Data {
 	protected DataType type = DataType.NULL;
 	protected String context_symbol = null;
 	protected double context_number = 0;
+	protected Data first=null;
+	protected Data second=null;
 	
 	@Override
 	public String toString(){
@@ -39,6 +42,24 @@ public class Data {
 			break;
 		case BOOLEAN:
 			s+=GetBoolean();
+			break;
+		case CONS:
+			s+="{";
+			if(first==null){
+				s+="()";
+			}
+			else{
+				s+=first.toString();
+			}
+			s+=", ";
+			
+			if(second==null){
+				s+="()";
+			}
+			else{
+				s+=second.toString();
+			}
+			s+="}";
 			break;
 		default:
 			s += "error : Data-toString, data type is wrong";	
@@ -72,6 +93,12 @@ public class Data {
 		context_symbol = context;
 	}
 	
+	public Data(Data aFirst, Data aSecond){
+		type = DataType.CONS;
+		first = aFirst;
+		second = aSecond;
+	}
+	
 	public double GetNumber(){
 		return this.context_number;
 	}
@@ -86,6 +113,14 @@ public class Data {
 	
 	public boolean GetBoolean(){
 		return (context_number != 0);
+	}
+	
+	public Data GetFirst(){
+		return first;
+	}
+	
+	public Data GetSecond(){
+		return second;
 	}
 	
 	

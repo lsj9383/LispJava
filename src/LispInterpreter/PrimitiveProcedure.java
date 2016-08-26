@@ -228,3 +228,149 @@ class Div extends Data implements Primitive{
 		return new Data(dat);
 	}
 }
+
+/* cons */
+class Cons extends Data implements Primitive{
+	private static Cons obj = null;
+	
+	private Cons(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static Cons Single(){
+		if(obj == null){
+			obj = new Cons();
+			return obj;
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.size()!=2){
+			System.out.println("error : Cons , size of args is not two");
+		}
+		
+		return new Data(args.get(0), args.get(1));
+	}
+}
+
+/* cons */
+class Car extends Data implements Primitive{
+	private static Car obj = null;
+	
+	private Car(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static Car Single(){
+		if(obj == null){
+			obj = new Car();
+			return obj;
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.size()!=1){
+			System.out.println("error : Car , args is not 'one' cons");
+			System.exit(0);
+		}
+		
+		return args.get(0).GetFirst();
+	}
+}
+
+/* cons */
+class Cdr extends Data implements Primitive{
+	private static Cdr obj = null;
+	
+	private Cdr(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static Cdr Single(){
+		if(obj == null){
+			obj = new Cdr();
+			return obj;
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.size()!=1){
+			System.out.println("error : Car , args is not 'one' cons");
+			System.exit(0);
+		}
+		
+		return args.get(0).GetSecond();
+	}
+}
+
+/* List */
+class List extends Data implements Primitive{
+	private static List obj = null;
+	
+	private List(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static List Single(){
+		if(obj == null){
+			obj = new List();
+			return obj;
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		return Iter(args, 0);
+	}
+	
+	private Data Iter(ArrayList<Data> args, int cnt){
+		if(cnt==args.size()){
+			return null;
+		}
+		else{
+			return new Data(args.get(cnt), Iter(args, cnt+1));
+		}
+	}
+}
+
+/* isNull */
+class isNull extends Data implements Primitive{
+	private static isNull obj = null;
+	
+	private isNull(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static isNull Single(){
+		if(obj == null){
+			obj = new isNull();
+			return obj;
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		if(args.size()!=1){
+			System.out.println("error : Car , args is not 'one' cons");
+			System.exit(0);
+		}
+		
+		if (args.get(0) == null){
+			return new Data(true);
+		}
+		else{
+			return new Data(false);
+		}
+	}
+}

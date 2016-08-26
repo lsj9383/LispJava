@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 class Lambda {
 	
+	/* 提取lambda表达式中的变量符号 */
 	static public ArrayList<String> Variables(Express exp){
 		ArrayList<String> vars = new ArrayList<String>();
 		Express exp_vars = new Express(exp.GetSubExps().get(2));
@@ -13,6 +14,7 @@ class Lambda {
 		return vars;
 	}
 	
+	/* 提取lambda表达式中的表达式集 */
 	static public ArrayList<Express> Body(Express exp){
 		ArrayList<Express> exps = new ArrayList<Express>();
 	
@@ -22,6 +24,7 @@ class Lambda {
 		return exps;
 	}
 	
+	/* 组成lambda表达式 */
 	static Express make(ArrayList<String> Vars, ArrayList<String> sExps){
 		String s = "(lambda (";
 		
