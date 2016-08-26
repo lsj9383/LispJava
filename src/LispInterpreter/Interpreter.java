@@ -48,14 +48,14 @@ public class Interpreter {
 	/*****************************eval-apply基本循环***************************************/
 	static Data Eval(Express exp, Environment env){
 		switch(exp.Type()){
-		case NUMBER:		return new Data(Double.valueOf(exp.GetSubExps().get(0)));
-		case VARIABLE:		return env.lookup_variable_value(exp.GetSubExps().get(0));
-		case ASSIGNMENT:	EvalAssignment(exp, env);		return null;	/* operation without data */
-		case DEFINITION:	EvalDefinition(exp, env);		return null;	/* operation without data */
+		case NUMBER:		return EvalSelf(exp, env);
+		case VARIABLE:		return EvalVariable(exp, env);
+		case ASSIGNMENT:	return EvalAssignment(exp, env);	/* operation without data and return null*/
+		case DEFINITION:	return EvalDefinition(exp, env);	/* operation without data and return null*/
 		case IF:			return EvalIf(exp, env);
 		case OR:			return EvalOr(exp, env);
 		case AND:			return EvalAnd(exp, env);
-		case LAMBDA:		return new Procedure(Lambda.Variables(exp), Lambda.Body(exp), env );
+		case LAMBDA:		return EvalLambda(exp, env);
 		case APPLICATION:	return Apply(Eval(operator(exp), env), ListOfValues(operands(exp), env));
 		default:			return null;
 		}
@@ -114,15 +114,27 @@ public class Interpreter {
 		return Eval(exps.get(exps.size()-1), env);
 	}
 	
+	/* 对自求值数据进行求值 */
+	static Data EvalSelf(Express exp, Environment env){
+		return new Data(Double.valueOf(exp.GetSubExps().get(0)));
+	}
+	
+	/* 对符号数据进行求值 */
+	static Data EvalVariable(Express exp, Environment env){
+		return env.lookup_variable_value(exp.GetSubExps().get(0));
+	}
+	
 	/* 对定义求值，也就是在环境中添加约束 */
-	static void EvalDefinition(Express exp, Environment env){
+	static Data EvalDefinition(Express exp, Environment env){
 		env.define_variable(Definition.Variable(exp), Eval(Definition.Value(exp), env));
+		return null;
 	}
 	
 	/* 对赋值求值，也就是在环境中修改约束 */
-	static void EvalAssignment(Express exp, Environment env){
+	static Data EvalAssignment(Express exp, Environment env){
 		env.set_variable_value(	exp.GetSubExps().get(2),
 								Eval(new Express(exp.GetSubExps().get(3)),env));
+		return null;
 	}
 	
 	/* 对条件表达式求值  */
@@ -179,5 +191,10 @@ public class Interpreter {
 			}
 		}
 		return new Data(true);
+	}
+	
+	/* 对lambda表达式求值 */
+	static Data EvalLambda(Express exp, Environment env){
+		return new Procedure(Lambda.Variables(exp), Lambda.Body(exp), env );
 	}
 }
