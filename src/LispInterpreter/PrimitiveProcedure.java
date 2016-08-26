@@ -40,12 +40,14 @@ class Equ extends Data implements Primitive{
 				System.exit(0);
 			}
 			else{
-				if(args.get(i).GetNumber()!=args.get(i-1).GetNumber()){
-					return new Data(false);
+				double n1 = (Double)args.get(i).GetContent();
+				double n2 = (Double)args.get(i-1).GetContent(); 
+				if(n1 != n2){
+					return new BooleanData(false);
 				}
 			}
 		}
-		return new Data(true);
+		return new BooleanData(true);
 	}
 }
 
@@ -74,12 +76,14 @@ class Less extends Data implements Primitive{
 				System.exit(0);
 			}
 			else{
-				if(args.get(i).GetNumber()<=args.get(i-1).GetNumber()){
-					return new Data(false);
+				double n1 = (Double)args.get(i).GetContent();
+				double n2 = (Double)args.get(i-1).GetContent(); 
+				if(n1<=n2){
+					return new BooleanData(false);
 				}
 			}
 		}
-		return new Data(true);
+		return new BooleanData(true);
 	}
 }
 
@@ -108,12 +112,14 @@ class Great extends Data implements Primitive{
 				System.exit(0);
 			}
 			else{
-				if(args.get(i).GetNumber()>=args.get(i-1).GetNumber()){
-					return new Data(false);
+				double n1 = (Double)args.get(i).GetContent();
+				double n2 = (Double)args.get(i-1).GetContent(); 
+				if(n1>=n2){
+					return new BooleanData(false);
 				}
 			}
 		}
-		return new Data(true);
+		return new BooleanData(true);
 	}
 }
 
@@ -138,10 +144,10 @@ class Add extends Data implements Primitive{
 		double dat = 0;
 		
 		for(int i=0; i<args.size(); i++){
-			dat += args.get(i).GetNumber();
+			dat += (Double)args.get(i).GetContent();
 		}
 		
-		return new Data(dat);
+		return new NumberData(dat);
 	}
 }
 
@@ -163,13 +169,13 @@ class Sub extends Data implements Primitive{
 	
 	@Override
 	public Data Call(ArrayList<Data> args){
-		double dat = args.get(0).GetNumber();
+		double dat = (Double)args.get(0).GetContent();
 		
 		for(int i=1; i<args.size(); i++){
-			dat -= args.get(i).GetNumber();
+			dat -= (Double)args.get(i).GetContent();
 		}
 		
-		return new Data(dat);
+		return new NumberData(dat);
 	}
 }
 
@@ -194,10 +200,10 @@ class Mul extends Data implements Primitive{
 		double dat = 1;
 		
 		for(int i=0; i<args.size(); i++){
-			dat *= args.get(i).GetNumber();
+			dat *= (Double)args.get(i).GetContent();
 		}
 		
-		return new Data(dat);
+		return new NumberData(dat);
 	}
 }
 
@@ -219,13 +225,13 @@ class Div extends Data implements Primitive{
 	
 	@Override
 	public Data Call(ArrayList<Data> args){
-		double dat = args.get(0).GetNumber();
+		double dat = (Double)args.get(0).GetContent();
 		
 		for(int i=1; i<args.size(); i++){
-			dat /= args.get(i).GetNumber();
+			dat /= (Double)args.get(i).GetContent();
 		}
 		
-		return new Data(dat);
+		return new NumberData(dat);
 	}
 }
 
@@ -252,7 +258,7 @@ class Cons extends Data implements Primitive{
 			System.out.println("error : Cons , size of args is not two");
 		}
 		
-		return new Data(args.get(0), args.get(1));
+		return new ConsData(args.get(0), args.get(1));
 	}
 }
 
@@ -280,7 +286,7 @@ class Car extends Data implements Primitive{
 			System.exit(0);
 		}
 		
-		return args.get(0).GetFirst();
+		return ((Pair)args.get(0).GetContent()).First();
 	}
 }
 
@@ -308,7 +314,7 @@ class Cdr extends Data implements Primitive{
 			System.exit(0);
 		}
 		
-		return args.get(0).GetSecond();
+		return ((Pair)args.get(0).GetContent()).Second();
 	}
 }
 
@@ -338,12 +344,12 @@ class List extends Data implements Primitive{
 			return null;
 		}
 		else{
-			return new Data(args.get(cnt), Iter(args, cnt+1));
+			return new ConsData(args.get(cnt), Iter(args, cnt+1));
 		}
 	}
 }
 
-/* isNull */
+/* null? */
 class isNull extends Data implements Primitive{
 	private static isNull obj = null;
 	
@@ -367,10 +373,10 @@ class isNull extends Data implements Primitive{
 		}
 		
 		if (args.get(0) == null){
-			return new Data(true);
+			return new BooleanData(true);
 		}
 		else{
-			return new Data(false);
+			return new BooleanData(false);
 		}
 	}
 }

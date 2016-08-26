@@ -13,120 +13,112 @@ enum DataType{
 	PROCEDURE
 }
 
-public class Data {
-	protected DataType type = DataType.NULL;
-	protected String context_symbol = null;
-	protected double context_number = 0;
-	protected Data first=null;
-	protected Data second=null;
+class Pair{
+	private Data first=null;
+	private Data second=null;
 	
-	@Override
-	public String toString(){
-		String s = "";
-		switch(type){
-		case NULL:
-			s += "error : Data-toString , data display NULL";
-			break;
-		case NUMBER:
-			s+=context_number;
-			break;
-		case SYMBOL:
-		case STRING:
-			s+=context_symbol;
-			break;
-		case PROCEDURE:
-			s+="PROCEDURE";
-			break;
-		case PRIMITIVE:
-			s+="PRIMITIVE";
-			break;
-		case BOOLEAN:
-			s+=GetBoolean();
-			break;
-		case CONS:
-			s+="{";
-			if(first==null){
-				s+="()";
-			}
-			else{
-				s+=first.toString();
-			}
-			s+=", ";
-			
-			if(second==null){
-				s+="()";
-			}
-			else{
-				s+=second.toString();
-			}
-			s+="}";
-			break;
-		default:
-			s += "error : Data-toString, data type is wrong";	
-		}
-		return s;
-	}
-	
-	public Data(){}
-	public Data(int context){
-		context_number = context;
-		type = DataType.NUMBER;
-	}
-	
-	public Data(double context){
-		context_number = context;
-		type = DataType.NUMBER;
-	}
-	
-	public Data(boolean t){
-		context_number = t ? 1 : 0;
-		type = DataType.BOOLEAN;
-	}
-	
-	public Data(String context){
-		if(context.charAt(0) == '"' && context.charAt(context.length()-1) == '"'){
-			type = DataType.STRING;
-		}
-		else{
-			type = DataType.SYMBOL;
-		}
-		context_symbol = context;
-	}
-	
-	public Data(Data aFirst, Data aSecond){
-		type = DataType.CONS;
+	public Pair(Data aFirst, Data aSecond){
 		first = aFirst;
 		second = aSecond;
 	}
 	
-	public double GetNumber(){
-		return this.context_number;
-	}
-	
-	public String GetString(){
-		return this.context_symbol;
-	}
-	
-	public String GetSymbol(){
-		return this.context_symbol;
-	}
-	
-	public boolean GetBoolean(){
-		return (context_number != 0);
-	}
-	
-	public Data GetFirst(){
+	public Data First(){
 		return first;
 	}
 	
-	public Data GetSecond(){
+	public Data Second(){
 		return second;
 	}
-	
-	
-	public DataType Type(){return type;}
 }
 
+/* 抽象数据类 */
+public class Data {
+	protected DataType type = DataType.NULL;
+	
+	public Data(){}
+	public DataType Type(){return type;}
+	public Object GetContent(){return "PRIMITIVE";};
+}
+
+/***********number*************/
+class NumberData extends Data{
+	Double content;
+	
+	public NumberData(double num){
+		content = num;
+		type = DataType.NUMBER;
+	}
+	
+	@Override
+	public Object GetContent(){
+		return content;
+	}
+	
+	@Override
+	public String toString(){
+		return new String()+content;
+	}
+}
+
+/***********Bool*************/
+class BooleanData extends Data{
+	Boolean content;
+	
+	public BooleanData(boolean bo){
+		content = bo;
+		type = DataType.BOOLEAN;
+	}
+	
+	@Override
+	public Object GetContent(){
+		return content;
+	}
+	
+	@Override
+	public String toString(){
+		return ""+content;
+	}
+}
+
+/***********Cons*************/
+class ConsData extends Data{
+	Pair content;
+	
+	public ConsData(Data aFirst, Data aSecond){
+		content = new Pair(aFirst, aSecond);
+		type = DataType.CONS;
+	}
+	
+	@Override
+	public Object GetContent(){
+		return content;
+	}
+	
+	@Override
+	public String toString(){
+		String s="";
+		s+="{";
+		if(content.First()==null){
+			s+="()";
+		}
+		else{
+			s+=content.First().toString();
+		}
+		s+=", ";
+		
+		if(content.Second()==null){
+			s+="()";
+		}
+		else{
+			s+=content.Second().toString();
+		}
+		s+="}";
+		return s;
+	}
+}
+
+
+/*********procedure********/
 class Procedure extends Data{
 	ArrayList<String> vars = null;
 	private ArrayList<Express> body = null;
@@ -149,5 +141,15 @@ class Procedure extends Data{
 	
 	public Environment Env(){
 		return env;
+	}
+	
+	@Override
+	public Object GetContent(){
+		return null;
+	}
+	
+	@Override
+	public String toString(){
+		return "PROCODURE";
 	}
 }

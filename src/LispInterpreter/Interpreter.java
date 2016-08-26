@@ -19,7 +19,7 @@ public class Interpreter {
 									Car.Single(),
 									Cdr.Single(),
 									List.Single(),
-									null,
+									null,				/*对null查字典，找到的Data就是null，因为null也是Data的一种...*/
 									isNull.Single()};
 	
 	/* 求值循环 */
@@ -116,7 +116,7 @@ public class Interpreter {
 	
 	/* 对自求值数据进行求值 */
 	static Data EvalSelf(Express exp, Environment env){
-		return new Data(Double.valueOf(exp.GetSubExps().get(0)));
+		return new NumberData(Double.valueOf(exp.GetSubExps().get(0)));
 	}
 	
 	/* 对符号数据进行求值 */
@@ -142,7 +142,7 @@ public class Interpreter {
 		Data pred = Eval(new Express(exp.GetSubExps().get(2)), env);
 		
 		if(pred.Type() == DataType.BOOLEAN){
-			if(pred.GetBoolean()){
+			if((Boolean)pred.GetContent()){
 				return Eval(new Express(exp.GetSubExps().get(3)), env);
 			}
 			else{
@@ -166,13 +166,13 @@ public class Interpreter {
 				return null;
 			}
 			else{
-				if( pred.GetBoolean() ){
-					return new Data(true);
+				if( (Boolean)pred.GetContent() ){
+					return new BooleanData(true);
 				}
 			}
 		}
 		
-		return new Data(false);
+		return new BooleanData(false);
 	}
 	
 	/* 对AND表达式求值  */
@@ -185,12 +185,12 @@ public class Interpreter {
 				return null;
 			}
 			else{
-				if( !pred.GetBoolean() ){
-					return new Data(false);
+				if( !(Boolean)pred.GetContent() ){
+					return new BooleanData(false);
 				}
 			}
 		}
-		return new Data(true);
+		return new BooleanData(true);
 	}
 	
 	/* 对lambda表达式求值 */
