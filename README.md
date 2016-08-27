@@ -105,7 +105,9 @@ enum ExpressType{
 * LAMBDA,		lambda表达式，求解生成过程。
 * BEGIN；		begin表达式，未实现。
 * APPLICATION;	组合式，需要使用apply进行应用。
+对表达式求解的定义，均定义在Interpreter
 <br>
+
 ##四、eval-apply基本循环的实现
 <p align="center">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/eval-apply.png?raw=true" alt="SICP"/>
