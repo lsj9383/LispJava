@@ -30,8 +30,15 @@ public class Project {
 * DriverLoop();  这个方法是启用Eval-Apply循环，用户可以在控制台输入lisp表达式，执行将得到结果。
 * Eval(Express exp, Environment env); 用户可以自己调用Eval方法，执行指定的lisp express。
 * final Environment GlobalEnv();  获得解释器的全局环境，便于Eval使用。返回的环境是不可变的。
-
-##二、表达式
+##二、树形解析
+Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。<br>
+例如:(* 2 (+ 3 4)) 可以表现为如下的`抽象语法树`
+<p align="left">
+  <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/se-tree.png?raw=true" alt="SICP"/>
+</p>
+这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
+对复合表达式的求值，就是对其中的子表达式进行求值，这样的一个递归过程，将会得到如此的树形结构。
+##三、表达式
 ###1.表达式数据
 lisp表达式采用S-Expression。用户向解释器输入表达式的过程，本质上是将字符串转换为表达式的过程。这是因为用户向控制台输入的均是表达式。<br>
 对字符串的解析，是将字符串进行拆分的过程，拆分的方法为：将字符串划分为多个Symbol，每个Symbol之间以分隔符间隔，分隔符包括`空格`与`换行`。<br>
@@ -63,14 +70,39 @@ public class Express {
 }
 ```
 表达式提供4个public方法，其中有一个是构造函数，另一个是打印该表达式的方法，另外两个是获得表达式信息的。
-##三、树形求解
-Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。<br>
-例如:(* 2 (+ 3 4)) 可以表现为如下的`抽象语法树`
-<p align="left">
-  <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/se-tree.png?raw=true" alt="SICP"/>
-</p>
-这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
-对复合表达式的求值，就是对其中的子表达式进行求值，这样的一个递归过程，将会得到如此的树形结构。
+###3.表达式类型
+表达式类型由一个枚举体来进行描述：
+```java
+enum ExpressType{
+	NULL,
+	NUMBER,
+	STRING,
+	VARIABLE,
+	QUOTED,
+	ASSIGNMENT,
+	DEFINITION,
+	IF,
+	COND,
+	OR,
+	AND,
+	LAMBDA,
+	BEGIN,
+	APPLICATION}
+```
+* NULL,  该表达式是初始化类型，不能进行求解。
+* NUMBER,		数值表达式，返回数值。
+* STRING,		字符串表达式，未实现
+* VARIABLE,		变量符号，在环境中寻找变量的约束。
+* QUOTED,		引号表达式，将表达式中的类容作为符号保存，未实现。
+* ASSIGNMENT,	赋值式，修改指定符号的约束。
+* DEFINITION,	定义式，增加指定符号的约束。
+* IF,			IF条件表达式，未实现。
+* COND,			COND表达式，未实现。
+* OR,			OR表达式。
+* AND,			AND表达式。
+* LAMBDA,		lambda表达式，求解生成过程。
+* BEGIN；		begin表达式，未实现。
+* APPLICATION;	组合式，需要使用apply进行应用。
 ##四、eval-apply基本循环的实现
 <p align="center">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/eval-apply.png?raw=true" alt="SICP"/>
