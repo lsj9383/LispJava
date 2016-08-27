@@ -26,7 +26,7 @@ public class Project {
 ```
 <br>执行后如下图:<br>
 <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/welcome.png?raw=true" alt="SICP"/>
-Interpreter提供了两种静态方法，供客户调用:<br>
+<br>Interpreter提供了两种静态方法，供客户调用:<br>
 * DriverLoop();  这个方法是启用Eval-Apply循环，用户可以在控制台输入lisp表达式，执行将得到结果。
 * Eval(Express exp, Environment env); 用户可以自己调用Eval方法，执行指定的lisp express。
 * final Environment GlobalEnv();  获得解释器的全局环境，便于Eval使用。返回的环境是不可变的。
