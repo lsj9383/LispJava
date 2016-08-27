@@ -24,6 +24,8 @@ public class Project {
 	}
 }
 ```
+执行后如下图:
+<img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/welcome.png?raw=true" alt="SICP"/>
 Interpreter提供了两种静态方法，供客户调用:<br>
 * DriverLoop();  这个方法是启用Eval-Apply循环，用户可以在控制台输入lisp表达式，执行将得到结果。
 * Eval(Express exp, Environment env); 用户可以自己调用Eval方法，执行指定的lisp express。

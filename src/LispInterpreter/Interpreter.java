@@ -35,8 +35,10 @@ public class Interpreter {
 		
 		/*读取定义式文件，并执行其中的各个表达式.*/
 		Express DefinitionExpress = Display.LoadDefinition();
-		for(int i=0; i<DefinitionExpress.GetSubExps().size(); i++){
-			Display.Show(Eval(new Express(DefinitionExpress.GetSubExps().get(i)), global_env));
+		if(DefinitionExpress != null){
+			for(int i=0; i<DefinitionExpress.GetSubExps().size(); i++){
+				Display.Show(Eval(new Express(DefinitionExpress.GetSubExps().get(i)), global_env));
+			}
 		}
 		/*执行解释器*/
 		while(true){

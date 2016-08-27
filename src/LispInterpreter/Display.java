@@ -58,7 +58,12 @@ class Display {
 					s+=tmp+"\n";
 					tmp = br.readLine();
 				}
-				return new Express(s);
+				if(s.length()==0){
+					return null;
+				}
+				else{
+					return new Express(s);
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
