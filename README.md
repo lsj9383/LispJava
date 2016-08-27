@@ -32,6 +32,37 @@ public class Project {
 * final Environment GlobalEnv();  获得解释器的全局环境，便于Eval使用。返回的环境是不可变的。
 
 ##二、表达式
+###1.表达式数据
+lisp表达式采用S-Expression。用户向解释器输入表达式的过程，本质上是将字符串转换为表达式的过程。这是因为用户向控制台输入的均是表达式。<br>
+对字符串的解析，是将字符串进行拆分的过程，拆分的方法为：将字符串划分为多个Symbol，每个Symbol之间以分隔符间隔，分隔符包括`空格`与`换行`。<br>
+Symbol包括：'(', ')', 任何数字， 任何符号，以及一对括号中的所有东西即'(*)'.
+###2.表达式类与接口
+```java
+public class Express {
+	private ArrayList<String> subexps = new ArrayList<String>();
+	private ExpressType type = ExpressType.NULL;
+
+	public Express(String s){
+		/* code, 分割字符串，*/
+	}
+	public ArrayList<String> GetSubExps(){
+		/* code, 获得表达式各个sybmol的分割 */
+	}
+	
+	public ExpressType Type(){
+		/* code, 获得表达式的类型 */
+	}
+	
+	@Override
+	public String toString(){
+		/* code */
+	}
+	
+	/* 以下是类内私有方法 */
+	....
+}
+```
+表达式提供4个public方法，其中有一个是构造函数，另一个是打印该表达式的方法，另外两个是获得表达式信息的。
 ##三、树形求解
 Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。<br>
 例如:(* 2 (+ 3 4)) 可以表现为如下的`抽象语法树`
