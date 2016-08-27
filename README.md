@@ -39,7 +39,7 @@ Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一
 </p>
 这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
 对复合表达式的求值，就是对其中的子表达式进行求值，这样的一个递归过程，将会得到如此的树形结构。
-<br>
+<br>树形解析<br>
 ##三、表达式
 ###1.表达式数据
 lisp表达式采用S-Expression。用户向解释器输入表达式的过程，本质上是将字符串转换为表达式的过程。这是因为用户向控制台输入的均是表达式。<br>
@@ -105,8 +105,7 @@ enum ExpressType{
 * LAMBDA,		lambda表达式，求解生成过程。
 * BEGIN；		begin表达式，未实现。
 * APPLICATION;	组合式，需要使用apply进行应用。
-对表达式求解的定义，均定义在Interpreter
-<br>
+<br>对表达式求解的定义，均定义在Interpreter<br>
 
 ##四、eval-apply基本循环的实现
 <p align="center">
