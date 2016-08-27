@@ -26,7 +26,7 @@ class Display {
 	static void Welcome(){
 		BufferedReader br;
 		try {
-			br = new BufferedReader(new FileReader(new File("welcome.txt")));
+			br = new BufferedReader(new FileReader(new File("Welcome.txt")));
 			String tmp;
 			try {
 				tmp = br.readLine();
@@ -42,5 +42,31 @@ class Display {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+	
+	/* 载入并执行定义式文件中的表达式 */
+	static Express LoadDefinition(){
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(new File("Definition.txt")));
+			String tmp;
+			String s="";
+			try {
+				/*获得s*/
+				tmp = br.readLine();
+				while(tmp != null){
+					s+=tmp+"\n";
+					tmp = br.readLine();
+				}
+				return new Express(s);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
 	}
 }

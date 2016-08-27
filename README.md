@@ -6,6 +6,29 @@
 虽然lisp是一个很老的语言，但实际上，大部分语言的处理器，在其深处都包含了一个小的lisp求值器。
 
 ##一、快速使用
+解释器的使用相当简洁，只需要引用`LispInterpreter package`即可。要运行解释器，使用static method : Interpreter.DriverLoop()。<br>
+这是一个是用的例子(也是当前工程的使用demo):
+```java
+package Client;
+
+import LispInterpreter.*;
+
+public class Project {
+	static void Run(){
+		Interpreter.DriverLoop();
+	}
+	
+	public static void main(String[] args){
+		Run();
+		System.out.println("project done!");
+	}
+}
+```
+Interpreter提供了两种静态方法，供客户调用:<br>
+* DriverLoop();  这个方法是启用Eval-Apply循环，用户可以在控制台输入lisp表达式，执行将得到结果。
+* Eval(Express exp, Environment env); 用户可以自己调用Eval方法，执行指定的lisp express。
+* final Environment GlobalEnv();  获得解释器的全局环境，便于Eval使用。返回的环境是不可变的。
+
 ##二、表达式
 ##三、树形求解
 Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。<br>

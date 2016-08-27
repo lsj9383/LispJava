@@ -1,0 +1,20 @@
+(define (factor1 n)
+  (if (= n 0)
+      1
+      (* n (factor1 (- n 1)))))
+
+(define (factor2 n)
+  (define (iter i n result)
+    (if (> i n)
+        result
+        (iter (+ i 1) n (* i result))))
+  (iter 1 n 1))
+
+(define (map op items)
+  (if (null? items)
+      nil
+      (cons (op (car items)) (map op (cdr items)))))
+
+(factor1 7)
+(factor2 7)
+(map factor1 (list 1 2 3 4 5 6 7))

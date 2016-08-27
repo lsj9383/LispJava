@@ -32,7 +32,7 @@ class Pair{
 }
 
 /* 抽象数据类 */
-public class Data {
+abstract public class Data {
 	protected DataType type = DataType.NULL;
 	
 	public Data(){}
