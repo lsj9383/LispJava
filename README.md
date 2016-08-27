@@ -30,6 +30,7 @@ public class Project {
 * DriverLoop();  这个方法是启用Eval-Apply循环，用户可以在控制台输入lisp表达式，执行将得到结果。
 * Eval(Express exp, Environment env); 用户可以自己调用Eval方法，执行指定的lisp express。
 * final Environment GlobalEnv();  获得解释器的全局环境，便于Eval使用。返回的环境是不可变的。
+<br>
 ##二、树形解析
 Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。<br>
 例如:(* 2 (+ 3 4)) 可以表现为如下的`抽象语法树`
@@ -38,6 +39,7 @@ Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一
 </p>
 这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
 对复合表达式的求值，就是对其中的子表达式进行求值，这样的一个递归过程，将会得到如此的树形结构。
+<br>
 ##三、表达式
 ###1.表达式数据
 lisp表达式采用S-Expression。用户向解释器输入表达式的过程，本质上是将字符串转换为表达式的过程。这是因为用户向控制台输入的均是表达式。<br>
@@ -103,6 +105,7 @@ enum ExpressType{
 * LAMBDA,		lambda表达式，求解生成过程。
 * BEGIN；		begin表达式，未实现。
 * APPLICATION;	组合式，需要使用apply进行应用。
+<br>
 ##四、eval-apply基本循环的实现
 <p align="center">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/eval-apply.png?raw=true" alt="SICP"/>
