@@ -201,4 +201,40 @@ class Opera extends Data implements Primitive{
 *  list : List;		数值，将输入的数据组成序列.
 *  nil  : null;		数值, Data的object为null.
 
-###五、数据类型
+##五、数据类型
+###1.lisp所有数据的种类
+* NULL,      无数据
+* NUMBER,    数值类书籍(暂时均用double)
+* BOOLEAN,   true or false
+* CONS,      序对数据
+* STRING,    字符串数据，暂未实现
+* QUOTED,    引号数据(符号数据)，未实现
+* PRIMITIVE, 基本过程
+* PROCEDURE, 复合过程
+<br>
+需要注意的是，过程也是一种数据。所有的数据类型用一个枚举体表述
+```java
+enum DataType{
+	NULL,
+	NUMBER,
+	STRING,
+	QUOTED,
+	BOOLEAN,
+	CONS,
+	PRIMITIVE,
+	PROCEDURE
+}
+```
+###2.抽象数据类
+这是所有数据类的父类，它其中的type数据标志了数据具体类型，并且这个数据类型将在构造体中进行设置。
+```java
+/* 抽象数据类 */
+abstract public class Data {
+	protected DataType type = DataType.NULL;
+	
+	public Data(){}
+	public DataType Type(){return type;}
+	public Object GetContent(){return "PRIMITIVE";};
+}
+```
+###3.数据类

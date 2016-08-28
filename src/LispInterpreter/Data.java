@@ -6,7 +6,7 @@ enum DataType{
 	NULL,
 	NUMBER,
 	STRING,
-	SYMBOL,
+	QUOTED,
 	BOOLEAN,
 	CONS,
 	PRIMITIVE,
