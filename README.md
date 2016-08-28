@@ -193,9 +193,12 @@ class Opera extends Data implements Primitive{
 *   -   : Sub;		操作，将第一个操作数减去其他的操作数.
 *   *   : Mul;		操作，将所有操作数相乘.
 *   /   : Div;		操作，将第一个操作数除以其他的操作数.
-*  cons : Cons;		操作，将输入的两个参数组成一个序对.
 *  car  : Car;		操作，将输入的序对提取第一个数据对象
 *  cdr  : Cdr;		操作，将输入的序对提取第二个数据对象
-*  null : null;		数值, Data的object为null.
+* set-car!:SetCar;	操作，将输入的序对的第一个数据对象修改约束.
+* set-cdr!:SetCar;	操作，将输入的序对的第二个数据对象修改约束.
+*  cons : Cons;		数值，将输入的两个参数组成一个序对.
+*  list : List;		数值，将输入的数据组成序列.
+*  nil  : null;		数值, Data的object为null.
 
 ###五、数据类型
