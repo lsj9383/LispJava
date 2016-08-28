@@ -380,3 +380,59 @@ class isNull extends Data implements Primitive{
 		}
 	}
 }
+
+/* set-car! */
+class SetCar extends Data implements Primitive{
+	private static SetCar obj = null;
+	
+	private SetCar(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static SetCar Single(){
+		if(obj == null){
+			obj = new SetCar();
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.get(0).type!=DataType.CONS){
+			System.out.println("error : SetCar , args(0) is not cons data");
+			System.exit(0);
+		}
+		((Pair)args.get(0).GetContent()).SetFirst(args.get(1));
+		
+		return null;
+	}
+}
+
+/* set-cdr! */
+class SetCdr extends Data implements Primitive{
+	private static SetCdr obj = null;
+	
+	private SetCdr(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static SetCdr Single(){
+		if(obj == null){
+			obj = new SetCdr();
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.get(0).type!=DataType.CONS){
+			System.out.println("error : SetCdr , args(0) is not cons data");
+			System.exit(0);
+		}
+		((Pair)args.get(0).GetContent()).SetSecond(args.get(1));
+		
+		return null;
+	}
+}

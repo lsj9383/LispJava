@@ -45,32 +45,30 @@ class Display {
 	}
 	
 	/* 载入并执行定义式文件中的表达式 */
-	static Express LoadDefinition(){
-		BufferedReader br;
+	static Express LoadDefinition(){		
 		try {
-			br = new BufferedReader(new FileReader(new File("Definition.txt")));
+			BufferedReader br = new BufferedReader(new FileReader(new File("Definition.txt")));
 			String tmp;
 			String s="";
-			try {
-				/*获得s*/
+			
+			/*获得s*/
+			tmp = br.readLine();
+			while(tmp != null){
+				s+=tmp+"\n";
 				tmp = br.readLine();
-				while(tmp != null){
-					s+=tmp+"\n";
-					tmp = br.readLine();
-				}
-				if(s.length()==0){
-					return null;
-				}
-				else{
-					return new Express(s);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			}
+			if(s.length()==0){
+				return null;
+			}
+			else{
+				return new Express(s);
 			}
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
 	}

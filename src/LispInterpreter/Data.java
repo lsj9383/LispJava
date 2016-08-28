@@ -29,6 +29,14 @@ class Pair{
 	public Data Second(){
 		return second;
 	}
+	
+	public void SetFirst(Data aFirst){
+		first = aFirst;
+	}
+	
+	public void SetSecond(Data aSecond){
+		second = aSecond;
+	}
 }
 
 /* 抽象数据类 */
