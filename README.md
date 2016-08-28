@@ -237,4 +237,3 @@ abstract public class Data {
 	public Object GetContent(){return "PRIMITIVE";};
 }
 ```
-###3.数据类
