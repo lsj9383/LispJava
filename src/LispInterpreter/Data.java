@@ -88,6 +88,26 @@ class BooleanData extends Data{
 	}
 }
 
+/***********Quoted*************/
+class QuotedData extends Data{
+	String content;
+	
+	public QuotedData(String bo){
+		content = bo;
+		type = DataType.QUOTED;
+	}
+	
+	@Override
+	public Object GetContent(){
+		return content;
+	}
+	
+	@Override
+	public String toString(){
+		return content;
+	}
+}
+
 /***********Cons*************/
 class ConsData extends Data{
 	Pair content;

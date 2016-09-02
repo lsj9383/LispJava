@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Interpreter {
 	private static String[] PrimitiveVars = 
-		{"=", "<", ">", "null?", "+", "-", "*", "/", "car", "cdr", "set-car!", "set-cdr!", "cons", "list", "nil"};
+		{"=", "<", ">", "null?", "+", "-", "*", "/", "car", "cdr", "set-car!", "set-cdr!", "remainder", "int", "cons", "list", "nil"};
 	
 	private static Data[]   PrimitiveVals = {
 									Equ.Single(),
@@ -20,6 +20,8 @@ public class Interpreter {
 									Cdr.Single(),
 									SetCar.Single(),
 									SetCdr.Single(),
+									Remainder.Single(),
+									Integer.Single(),
 									Cons.Single(),
 									List.Single(),
 									null};				/*对null查字典，找到的Data就是null，因为null也是Data的一种...*/
@@ -62,6 +64,7 @@ public class Interpreter {
 		switch(exp.Type()){
 		case NUMBER:		return EvalSelf(exp, env);
 		case VARIABLE:		return EvalVariable(exp, env);
+		case QUOTED:		return EvalQuoted(exp, env);
 		case ASSIGNMENT:	return EvalAssignment(exp, env);	/* operation without data and return null*/
 		case DEFINITION:	return EvalDefinition(exp, env);	/* operation without data and return null*/
 		case IF:			return EvalIf(exp, env);
@@ -134,6 +137,11 @@ public class Interpreter {
 	/* 对符号数据进行求值 */
 	private static Data EvalVariable(Express exp, Environment env){
 		return env.lookup_variable_value(exp.GetSubExps().get(0));
+	}
+	
+	/* 对引号数据进行求值 */
+	private static Data EvalQuoted(Express exp, Environment env){
+		return new QuotedData(exp.GetSubExps().get(2));
 	}
 	
 	/* 对定义求值，也就是在环境中添加约束 */

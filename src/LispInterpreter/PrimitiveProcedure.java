@@ -436,3 +436,66 @@ class SetCdr extends Data implements Primitive{
 		return null;
 	}
 }
+
+/* remainder */
+class Remainder extends Data implements Primitive{
+	private static Remainder obj = null;
+	
+	private Remainder(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static Remainder Single(){
+		if(obj == null){
+			obj = new Remainder();
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.size()!=2){
+			System.out.println("error : remainder , operands should be two numbers.");
+		}
+		if(args.get(0).Type()!=DataType.NUMBER || args.get(1).Type()!=DataType.NUMBER){
+			System.out.println("error : remainder , operands is not NUMBER.");
+		}
+		
+		double first = (double)args.get(0).GetContent();
+		double second = (double)args.get(1).GetContent();
+		
+		return new NumberData(first%second);
+	}
+}
+
+/* int */
+class Integer extends Data implements Primitive{
+	private static Integer obj = null;
+	
+	private Integer(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static Integer Single(){
+		if(obj == null){
+			obj = new Integer();
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.size()!=1){
+			System.out.println("error : remainder , operand should be one number.");
+		}
+		if(args.get(0).Type()!=DataType.NUMBER){
+			System.out.println("error : remainder , operands is not NUMBER.");
+		}
+		
+		double first = (double)args.get(0).GetContent();
+		
+		return new NumberData((int)first);
+	}
+}
