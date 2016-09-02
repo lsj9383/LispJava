@@ -1,6 +1,12 @@
 package LispInterpreter;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+
+import javax.imageio.ImageIO;
 
 /* 
  * 基本过程:
@@ -489,13 +495,86 @@ class Integer extends Data implements Primitive{
 		
 		if(args.size()!=1){
 			System.out.println("error : remainder , operand should be one number.");
+			System.exit(0);
 		}
 		if(args.get(0).Type()!=DataType.NUMBER){
 			System.out.println("error : remainder , operands is not NUMBER.");
+			System.exit(0);
 		}
 		
 		double first = (double)args.get(0).GetContent();
 		
 		return new NumberData((int)first);
+	}
+}
+
+/* load-image */
+class LoadImage extends Data implements Primitive{
+	private static LoadImage obj = null;
+	
+	private LoadImage(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static LoadImage Single(){
+		if(obj == null){
+			obj = new LoadImage();
+		}
+		return obj;
+	}
+	
+	private Data ColorData(int[] rgb){
+		return new ConsData(new NumberData(rgb[0]), 
+							new ConsData(new NumberData(rgb[1]), 
+										 new ConsData(new NumberData(rgb[2]), null)));
+	} 
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.size()!=1){
+			System.out.println("error : LoadImage , operands should be one");
+			System.exit(0);
+		}
+		if(args.get(0).Type() != DataType.QUOTED){
+			System.out.println("error : LoadImage , operands should be a quoted");
+			System.exit(0);
+		}
+		
+		ConsData header = new ConsData(new QuotedData("#IMAGE#"), null);
+		ConsData ROW = header;
+		
+		//image
+		try {
+			BufferedImage image = ImageIO.read(new File((String)args.get(0).GetContent()));
+			WritableRaster raster = image.getRaster();
+			
+			for(int row=0; row<raster.getHeight(); row++){
+				//获得新行
+				((Pair)ROW.GetContent()).SetSecond(new ConsData(null, null));
+				ROW = (ConsData)((Pair)ROW.GetContent()).Second();
+				ConsData COL = ROW;
+				
+				for(int col=0; col<raster.getWidth(); col++){
+					//获得新列
+					if(col==0){
+						((Pair)COL.GetContent()).SetFirst(new ConsData(null, null));
+						COL = (ConsData)((Pair)COL.GetContent()).First();
+					}else{
+						((Pair)COL.GetContent()).SetSecond(new ConsData(null, null));
+						COL = (ConsData)((Pair)COL.GetContent()).Second();
+					}
+					
+					int[] pix = new int[3];
+					raster.getPixel(row, col, pix);			//读取像素
+					Data color_data = ColorData(pix);		//
+					
+					((Pair)COL.GetContent()).SetFirst(color_data);
+				}
+			}
+			
+		} catch (Exception e) {;} 
+		
+		return header;
 	}
 }
