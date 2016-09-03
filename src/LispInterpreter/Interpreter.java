@@ -5,9 +5,10 @@ import java.util.*;
 
 public class Interpreter {
 	private static String[] PrimitiveVars = 
-		{"=", "<", ">", "null?", "+", "-", "*", "/", "car", "cdr", "set-car!", "set-cdr!", "remainder", "int", "load-image", "display-image", "save-image", "cons", "list", "nil"};
+		{"eq?", "=", "<", ">", "null?", "+", "-", "*", "/", "car", "cdr", "set-car!", "set-cdr!", "remainder", "int", "load-image", "display-image", "save-image", "cons", "list", "nil"};
 	
 	private static Data[]   PrimitiveVals = {
+									IsEq.Single(),
 									Equ.Single(),
 									Less.Single(),
 									Great.Single(),
