@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Interpreter {
 	private static String[] PrimitiveVars = 
-		{"=", "<", ">", "null?", "+", "-", "*", "/", "car", "cdr", "set-car!", "set-cdr!", "remainder", "int", "load-image", "display-image", "cons", "list", "nil"};
+		{"=", "<", ">", "null?", "+", "-", "*", "/", "car", "cdr", "set-car!", "set-cdr!", "remainder", "int", "load-image", "display-image", "save-image", "cons", "list", "nil"};
 	
 	private static Data[]   PrimitiveVals = {
 									Equ.Single(),
@@ -24,6 +24,7 @@ public class Interpreter {
 									Integer.Single(),
 									LoadImage.Single(),
 									DisplayImage.Single(),
+									SaveImage.Single(),
 									Cons.Single(),
 									List.Single(),
 									null};				/*对null查字典，找到的Data就是null，因为null也是Data的一种...*/
