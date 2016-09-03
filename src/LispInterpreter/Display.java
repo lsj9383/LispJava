@@ -16,15 +16,6 @@ class Display {
 			s += "OK\n";
 		}
 		else{
-			if(data.Type() == DataType.CONS){
-				Data FirstData = ((Pair)data.GetContent()).First();
-				if (FirstData.Type()==DataType.QUOTED){
-					if(((String)FirstData.GetContent()).equals("#IMAGE#")){
-						System.out.println("#IMAGE#");
-						return ;
-					}
-				}
-			}
 			s = data.toString()+"\n";
 		}
 		

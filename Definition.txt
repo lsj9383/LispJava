@@ -18,3 +18,12 @@
 (factor1 7)
 (factor2 7)
 (map factor1 (list 1 2 3 4 5 6 7))
+
+(define (image-width image)
+  (car (cdr (car image))))
+  
+(define (image-height image)
+  (car (cdr (cdr (car image)))))
+  
+(define img1 (load-image (quoted D://test.bmp)))
+(define img2 (load-image (quoted D://lena.jpg)))
