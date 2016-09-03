@@ -29,7 +29,7 @@ class LoadImage extends Data implements Primitive{
 	private Data ColorData(int[] rgb){
 		return new ConsData(new NumberData(rgb[0]), 
 							new ConsData(new NumberData(rgb[1]), 
-										 new ConsData(new NumberData(rgb[2]), null)));
+										 new ConsData(new NumberData(rgb[2]), NullData.Single())));
 	} 
 	
 	@Override
@@ -53,23 +53,23 @@ class LoadImage extends Data implements Primitive{
 							new ConsData(	new QuotedData("#IMAGE#"),
 											new ConsData(	new NumberData(image.getWidth()),					//width 
 															new ConsData( 	new NumberData(image.getHeight()),	//height
-																			null))), 
+																			NullData.Single()))), 
 							null );
 			ConsData ROW = header;
 			
 			for(int row=0; row<raster.getHeight(); row++){
 				//获得新行
-				((Pair)ROW.GetContent()).SetSecond(new ConsData(null, null));
+				((Pair)ROW.GetContent()).SetSecond(new ConsData(NullData.Single(), NullData.Single()));
 				ROW = (ConsData)((Pair)ROW.GetContent()).Second();
 				ConsData COL = ROW;
 				
 				for(int col=0; col<raster.getWidth(); col++){
 					//获得新列
 					if(col==0){
-						((Pair)COL.GetContent()).SetFirst(new ConsData(null, null));
+						((Pair)COL.GetContent()).SetFirst(new ConsData(NullData.Single(), NullData.Single()));
 						COL = (ConsData)((Pair)COL.GetContent()).First();
 					}else{
-						((Pair)COL.GetContent()).SetSecond(new ConsData(null, null));
+						((Pair)COL.GetContent()).SetSecond(new ConsData(NullData.Single(), NullData.Single()));
 						COL = (ConsData)((Pair)COL.GetContent()).Second();
 					}
 					

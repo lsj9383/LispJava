@@ -354,7 +354,7 @@ class List extends Data implements Primitive{
 	
 	private Data Iter(ArrayList<Data> args, int cnt){
 		if(cnt==args.size()){
-			return null;
+			return NullData.Single();
 		}
 		else{
 			return new ConsData(args.get(cnt), Iter(args, cnt+1));
@@ -384,8 +384,8 @@ class isNull extends Data implements Primitive{
 			System.out.println("error : Car , args is not 'one' cons");
 			System.exit(0);
 		}
-		
-		if (args.get(0) == null){
+		Data dat = args.get(0);
+		if (args.get(0).Type() == DataType.NULL){
 			return new BooleanData(true);
 		}
 		else{

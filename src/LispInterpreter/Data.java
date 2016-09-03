@@ -48,6 +48,33 @@ abstract public class Data {
 	public Object GetContent(){return "PRIMITIVE";};
 }
 
+/***********nil*************/
+class NullData extends Data{
+	
+	private static NullData nd=null;
+	
+	private NullData(){
+		type = DataType.NULL;
+	}
+	
+	public static NullData Single(){
+		if(nd==null){
+			nd = new NullData();
+		}
+		return nd;
+	}
+	
+	@Override
+	public Object GetContent(){
+		return null;
+	}
+	
+	@Override
+	public String toString(){
+		return "nil";
+	}
+}
+
 /***********number*************/
 class NumberData extends Data{
 	Double content;

@@ -28,7 +28,7 @@ public class Interpreter {
 									SaveImage.Single(),
 									Cons.Single(),
 									List.Single(),
-									null};				/*对null查字典，找到的Data就是null，因为null也是Data的一种...*/
+									NullData.Single()};				/*对null查字典，找到的Data就是null，因为null也是Data的一种...*/
 	private static Frame InitialFrame = new Frame(	new ArrayList<String>(Arrays.asList(PrimitiveVars)),
 													new ArrayList<Data>(Arrays.asList(PrimitiveVals)));
 	private static Environment global_env = new Environment(InitialFrame, null);		//初始化全局环境.
