@@ -4,34 +4,39 @@ import java.io.*;
 import java.util.*;
 
 public class Interpreter {
-	private static String[] PrimitiveVars = 
-		{"eq?", "=", "<", ">", "null?", "+", "-", "*", "/", "car", "cdr", "set-car!", "set-cdr!", "remainder", "int", "load-image", "display-image", "save-image", "cons", "list", "nil"};
 	
-	private static Data[]   PrimitiveVals = {
-									IsEq.Single(),
-									Equ.Single(),
-									Less.Single(),
-									Great.Single(),
-									isNull.Single(),
-									Add.Single(), 
-									Sub.Single(), 
-									Mul.Single(), 
-									Div.Single(),
-									Car.Single(),
-									Cdr.Single(),
-									SetCar.Single(),
-									SetCdr.Single(),
-									Remainder.Single(),
-									Integer.Single(),
-									LoadImage.Single(),
-									DisplayImage.Single(),
-									SaveImage.Single(),
-									Cons.Single(),
-									List.Single(),
-									NullData.Single()};				/*对null查字典，找到的Data就是null，因为null也是Data的一种...*/
-	private static Frame InitialFrame = new Frame(	new ArrayList<String>(Arrays.asList(PrimitiveVars)),
-													new ArrayList<Data>(Arrays.asList(PrimitiveVals)));
-	private static Environment global_env = new Environment(InitialFrame, null);		//初始化全局环境.
+	private static Frame InitialFrame = null;
+	private static Environment global_env = null;
+	private static Map<String, Data> PrimitiveMap = new TreeMap<>();
+	/* 静态初始化，一个工程中最多只能拥有一个解释器 */
+	static{
+		PrimitiveMap.put("eq?"	, IsEq.Single());
+		PrimitiveMap.put("="	, Equ.Single());
+		PrimitiveMap.put("<"	, Less.Single());
+		PrimitiveMap.put(">"	, Great.Single());
+		PrimitiveMap.put("null?", isNull.Single());
+		PrimitiveMap.put("pair?", IsPair.Single());
+		PrimitiveMap.put("+"	, Add.Single());
+		PrimitiveMap.put("-"	, Sub.Single());
+		PrimitiveMap.put("*"	, Mul.Single());
+		PrimitiveMap.put("/"	, Div.Single());
+		PrimitiveMap.put("car"	, Car.Single());
+		PrimitiveMap.put("cdr"	, Cdr.Single());
+		PrimitiveMap.put("set-car!"	, SetCar.Single());
+		PrimitiveMap.put("set-cdr!"	, SetCdr.Single());
+		PrimitiveMap.put("remainder", Remainder.Single());
+		PrimitiveMap.put("int"		, Integer.Single());
+		PrimitiveMap.put("load-image"	, LoadImage.Single());
+		PrimitiveMap.put("display-image", DisplayImage.Single());
+		PrimitiveMap.put("save-image"	, SaveImage.Single());
+		PrimitiveMap.put("cons"			, Cons.Single());
+		PrimitiveMap.put("list"			, List.Single());
+		PrimitiveMap.put("true"			, new BooleanData(true));
+		PrimitiveMap.put("false"		, new BooleanData(false));
+		PrimitiveMap.put("nil"			, NullData.Single());
+		InitialFrame = new Frame(PrimitiveMap);
+		global_env = new Environment(InitialFrame, null);		//初始化全局环境
+	}
 	
 	/* 得到解释器全局环境 */
 	public static final Environment GlobalEnv(){
@@ -75,6 +80,7 @@ public class Interpreter {
 		case OR:			return EvalOr(exp, env);
 		case AND:			return EvalAnd(exp, env);
 		case LAMBDA:		return EvalLambda(exp, env);
+		case BEGIN:			return EvalBegin(exp, env);
 		case APPLICATION:	return Apply(Eval(operator(exp), env), ListOfValues(operands(exp), env));
 		default:			return null;
 		}
@@ -126,11 +132,12 @@ public class Interpreter {
 	
 	/*对复合式的body顺序求值*/
 	private static Data EvalSequence(ArrayList<Express> exps, Environment env){
+		/* 最后一个表达式因为要返回值，所以单独处理 */
 		for(int i=0; i<exps.size()-1; i++){
 			Eval(exps.get(i), env);
 		}
 		
-		return Eval(exps.get(exps.size()-1), env);
+		return Eval(exps.get(exps.size()-1), env);		//返回最后一个表达式的结果
 	}
 	
 	/* 对自求值数据进行求值 */
@@ -220,5 +227,15 @@ public class Interpreter {
 	/* 对lambda表达式求值 */
 	private static Data EvalLambda(Express exp, Environment env){
 		return new Procedure(Lambda.Variables(exp), Lambda.Body(exp), env );
+	}
+	
+	/* 对begin表达式求值 */
+	private static Data EvalBegin(Express exp, Environment env){
+		ArrayList<Express> exps = new ArrayList<>();
+		for(int i=2; i<exp.GetSubExps().size()-1; i++){
+			exps.add(new Express(exp.GetSubExps().get(i)));
+		}
+		
+		return EvalSequence(exps, env);
 	}
 }

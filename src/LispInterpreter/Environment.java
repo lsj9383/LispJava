@@ -111,8 +111,8 @@ public class Environment {
 }
 
 class Frame{
-	private ArrayList<String> vars;
-	private ArrayList<Data> vals;
+	private ArrayList<String> vars = new ArrayList<>();
+	private ArrayList<Data> vals = new ArrayList<>();
 	
 	public Frame(ArrayList<String> aVars, ArrayList<Data> aVals){
 		if(aVars.size() != aVals.size()){
@@ -121,6 +121,13 @@ class Frame{
 		}
 		vars = aVars;
 		vals = aVals;
+	}
+	
+	public Frame(Map<String, Data> map){
+		for(Map.Entry<String, Data> entry : map.entrySet()){
+			vars.add(entry.getKey());
+			vals.add(entry.getValue());
+		}
 	}
 	
 	public ArrayList<String> frame_variables(){

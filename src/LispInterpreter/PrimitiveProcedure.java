@@ -133,6 +133,36 @@ class Great extends Data implements Primitive{
 	}
 }
 
+/* pair? */
+class IsPair extends Data implements Primitive{
+	private static IsPair obj = null;
+	
+	private IsPair(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static IsPair Single(){
+		if(obj == null){
+			obj = new IsPair();
+			return obj;
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		if(args.size() != 1){
+			System.out.println("error : IsPair , operands is not one!");
+			System.exit(0);
+		}
+		
+		if(args.get(0).Type() == DataType.CONS){
+			return new BooleanData(true);
+		}
+		return new BooleanData(false);
+	}
+}
+
 /* + */
 class Add extends Data implements Primitive{
 	private static Add obj = null;
