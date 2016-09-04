@@ -545,6 +545,40 @@ class Integer extends Data implements Primitive{
 	}
 }
 
+/* xor */
+class Xor extends Data implements Primitive{
+	private static Xor obj = null;
+	
+	private Xor(){
+		type = DataType.PRIMITIVE;
+	}
+	
+	static Xor Single(){
+		if(obj == null){
+			obj = new Xor();
+		}
+		return obj;
+	}
+	
+	@Override
+	public Data Call(ArrayList<Data> args){
+		
+		if(args.size()!=2){
+			System.out.println("error : remainder , operand should be tow number.");
+			System.exit(0);
+		}
+		if(args.get(0).Type()!=DataType.NUMBER || args.get(1).Type()!=DataType.NUMBER){
+			System.out.println("error : remainder , operands is not NUMBER.");
+			System.exit(0);
+		}
+		
+		double first = (Double)args.get(0).GetContent();
+		double second = (Double)args.get(1).GetContent();
+
+		return new NumberData((int)first ^ (int)second);
+	}
+}
+
 /* eq? */
 class IsEq extends Data implements Primitive{
 	private static IsEq obj = null;

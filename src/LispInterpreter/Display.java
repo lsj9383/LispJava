@@ -26,7 +26,7 @@ class Display {
 	static void Welcome(){
 		BufferedReader br;
 		try {
-			br = new BufferedReader(new FileReader(new File("Welcome.txt")));
+			br = new BufferedReader(new FileReader(new File("./liva-start/Welcome.txt")));
 			String tmp;
 			try {
 				tmp = br.readLine();
@@ -47,7 +47,7 @@ class Display {
 	/* 载入并执行定义式文件中的表达式 */
 	static Express LoadDefinition(){		
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File("Definition.txt")));
+			BufferedReader br = new BufferedReader(new FileReader(new File("./liva-start/Definition.txt")));
 			String tmp;
 			String s="";
 			

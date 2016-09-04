@@ -1,8 +1,8 @@
-﻿#Lisp-Scheme解释器
+﻿#Lisp解释器的模仿实现:LIVA
 <p align="center">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/title.jpg?raw=true" alt="SICP"/>
 </p>
-将java作为`元语言`(Metalingustic)，对lisp的`Scheme`的子集作实现。<br>
+将java作为`元语言`(Metalingustic)，模仿LISP的`Scheme方言`，并将该新方言命名为Liva。<br>
 虽然lisp是一个很老的语言，但实际上，大部分语言的处理器，在其深处都包含了一个小的lisp求值器。
 
 ##一、快速使用
@@ -137,16 +137,18 @@ apply描述了一个过程如何作用。<br>
 1).对于基本过程，其实现方式已经由`元语言`在底层实现。<br>
 2).对于复合过程，其实现方式是将`<body>`提取出来，并根据输入参数创建新环境，再对这个`<body>`进行求值。`<body>`通常是一组表达式。
 ```java
-static Data Eval(Express exp, Environment env){
+public static Data Eval(Express exp, Environment env){
 	switch(exp.Type()){
 	case NUMBER:		return EvalSelf(exp, env);
 	case VARIABLE:		return EvalVariable(exp, env);
+	case QUOTED:		return EvalQuoted(exp, env);
 	case ASSIGNMENT:	return EvalAssignment(exp, env);	/* operation without data and return null*/
 	case DEFINITION:	return EvalDefinition(exp, env);	/* operation without data and return null*/
 	case IF:			return EvalIf(exp, env);
 	case OR:			return EvalOr(exp, env);
 	case AND:			return EvalAnd(exp, env);
 	case LAMBDA:		return EvalLambda(exp, env);
+	case BEGIN:			return EvalBegin(exp, env);
 	case APPLICATION:	return Apply(Eval(operator(exp), env), ListOfValues(operands(exp), env));
 	default:			return null;
 	}
@@ -199,7 +201,20 @@ class Opera extends Data implements Primitive{
 * set-cdr!:SetCar;	操作，将输入的序对的第二个数据对象修改约束.
 *  cons : Cons;		数值，将输入的两个参数组成一个序对.
 *  list : List;		数值，将输入的数据组成序列.
-*  nil  : null;		数值, Data的object为null.
+* LoadImage		: load-image	数值，读取指定路径的图像.
+* SaveImage		: save-image	数值，将图像保存到指定路径.
+* DisplayImage	: display-image	数值，另开线程显示图像.
+
+###图像基本过程
+liva有自己的图像实现框架，有自己特定的图像保存格式。
+####图像基本过程的使用
+	加载图像(load-image (quoted file-path))
+	保存图像(save-image image (quoted file-path))
+	显示图像(display-image image)
+	
+####图像数据格式
+
+###文件基本过程
 
 ##五、数据类型
 ###1.lisp所有数据的种类
@@ -235,5 +250,42 @@ abstract public class Data {
 	public Data(){}
 	public DataType Type(){return type;}
 	public Object GetContent(){return "PRIMITIVE";};
+}
+```
+
+##六、初始全局环境
+通过Interpreter的静态初始化，来进行加载。由于一个工程里面，最多只能有一个Interpreter类，因此该初始化使用的是静态初始化。
+```java
+private static Frame InitialFrame = null;
+private static Environment global_env = null;
+private static Map<String, Data> PrimitiveMap = new TreeMap<>();
+
+static{
+	PrimitiveMap.put("eq?"	, IsEq.Single());
+	PrimitiveMap.put("="	, Equ.Single());
+	PrimitiveMap.put("<"	, Less.Single());
+	PrimitiveMap.put(">"	, Great.Single());
+	PrimitiveMap.put("null?", isNull.Single());
+	PrimitiveMap.put("pair?", IsPair.Single());
+	PrimitiveMap.put("+"	, Add.Single());
+	PrimitiveMap.put("-"	, Sub.Single());
+	PrimitiveMap.put("*"	, Mul.Single());
+	PrimitiveMap.put("/"	, Div.Single());
+	PrimitiveMap.put("car"	, Car.Single());
+	PrimitiveMap.put("cdr"	, Cdr.Single());
+	PrimitiveMap.put("set-car!"	, SetCar.Single());
+	PrimitiveMap.put("set-cdr!"	, SetCdr.Single());
+	PrimitiveMap.put("remainder", Remainder.Single());
+	PrimitiveMap.put("int"		, Integer.Single());
+	PrimitiveMap.put("load-image"	, LoadImage.Single());
+	PrimitiveMap.put("display-image", DisplayImage.Single());
+	PrimitiveMap.put("save-image"	, SaveImage.Single());
+	PrimitiveMap.put("cons"			, Cons.Single());
+	PrimitiveMap.put("list"			, List.Single());
+	PrimitiveMap.put("true"			, new BooleanData(true));
+	PrimitiveMap.put("false"		, new BooleanData(false));
+	PrimitiveMap.put("nil"			, NullData.Single());
+	InitialFrame = new Frame(PrimitiveMap);
+	global_env = new Environment(InitialFrame, null);		//初始化全局环境
 }
 ```

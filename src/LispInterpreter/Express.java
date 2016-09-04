@@ -30,8 +30,8 @@ public class Express {
 		return s;
 	}
 	public Express(String s){
-		Split(s);		//将s按规则分割, 每一个子表达式都添加到datas中
-		UpdateType();	//根据得到的表达式设置该表达式类型
+		Split(s);							//将s按规则分割, 每一个子表达式都添加到datas中
+		UpdateType();						//根据得到的表达式设置该表达式类型
 	}
 	public ArrayList<String> GetSubExps(){
 		return subexps;

@@ -26,6 +26,7 @@ public class Interpreter {
 		PrimitiveMap.put("set-cdr!"	, SetCdr.Single());
 		PrimitiveMap.put("remainder", Remainder.Single());
 		PrimitiveMap.put("int"		, Integer.Single());
+		PrimitiveMap.put("xor"		, Xor.Single());
 		PrimitiveMap.put("load-image"	, LoadImage.Single());
 		PrimitiveMap.put("display-image", DisplayImage.Single());
 		PrimitiveMap.put("save-image"	, SaveImage.Single());

@@ -13,6 +13,7 @@ enum DataType{
 	PROCEDURE
 }
 
+/* Ðò¶ÔÊý¾Ý */
 class Pair{
 	private Data first=null;
 	private Data second=null;

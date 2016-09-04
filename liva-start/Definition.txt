@@ -1,0 +1,46 @@
+(define (factor1 n)
+  (if (= n 0)
+      1
+      (* n (factor1 (- n 1)))))
+
+(define (factor2 n)
+  (define (iter i n result)
+    (if (> i n)
+        result
+        (iter (+ i 1) n (* i result))))
+  (iter 1 n 1))
+
+(define (map op items)
+  (if (null? items)
+      nil
+      (cons (op (car items)) (map op (cdr items)))))
+
+(factor1 7)
+(factor2 7)
+(map factor1 (list 1 2 3 4 5 6 7))
+
+(define (image-width image)
+  (car (cdr (car image))))
+  
+(define (image-height image)
+  (car (cdr (cdr (car image)))))
+  
+(define (image? image)
+  (if (pair? image)
+      (if (pair? (car image))
+          (if (eq? (quoted #IMAGE#) (car (car image)))
+              true
+              false)
+          false)
+      false))
+      
+(define img1 (load-image (quoted D://test.bmp)))
+(define img2 (load-image (quoted D://lena.jpg)))
+
+(define (rand-seed seed)
+  (lambda () (set! seed (+ seed 1)) seed))
+
+(define rand-gen (rand-seed 10))
+
+(rand-gen)
+(rand-gen)
