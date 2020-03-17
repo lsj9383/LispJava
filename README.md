@@ -1,11 +1,11 @@
-﻿#Lisp解释器的模仿实现:LIVA
+﻿# Lisp解释器的模仿实现:LIVA
 <p align="center">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/title.jpg?raw=true" alt="SICP"/>
 </p>
 将java作为`元语言`(Metalingustic)，模仿LISP的`Scheme方言`，并将该新方言命名为Liva。<br>
 虽然lisp是一个很老的语言，但实际上，大部分语言的处理器，在其深处都包含了一个小的lisp求值器。
 
-##一、快速使用
+## 一、快速使用
 解释器的使用相当简洁，只需要引用`LispInterpreter package`即可。要运行解释器，使用static method : Interpreter.DriverLoop()。<br>
 这是一个是用的例子(也是当前工程的使用demo):
 ```java
@@ -31,7 +31,7 @@ public class Project {
 * Eval(Express exp, Environment env); 用户可以自己调用Eval方法，执行指定的lisp express。
 * final Environment GlobalEnv();  获得解释器的全局环境，便于Eval使用。返回的环境是不可变的。
 
-##二、树形解析
+## 二、树形解析
 Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一点可以称为`抽象语法树`。<br>
 例如:(* 2 (+ 3 4)) 可以表现为如下的`抽象语法树`
 <p align="left">
@@ -40,12 +40,12 @@ Lisp语言的语法采用`s-expression`, 是一种结构化数据，更具体一
 这样的数据概念简单，不易混淆，解释器也非常容易对其进行解析。<br>
 对复合表达式的求值，就是对其中的子表达式进行求值，这样的一个递归过程，将会得到如此的树形结构。
 
-##三、表达式
-###1.表达式数据
+## 三、表达式
+### 1.表达式数据
 lisp表达式采用S-Expression。用户向解释器输入表达式的过程，本质上是将字符串转换为表达式的过程。这是因为用户向控制台输入的均是表达式。<br>
 对字符串的解析，是将字符串进行拆分的过程，拆分的方法为：将字符串划分为多个Symbol，每个Symbol之间以分隔符间隔，分隔符包括`空格`与`换行`。<br>
 Symbol包括：'(', ')', 任何数字， 任何符号，以及一对括号中的所有东西即'(*)'.
-###2.表达式类与接口
+### 2.表达式类与接口
 ```java
 public class Express {
 	private ArrayList<String> subexps = new ArrayList<String>();
@@ -72,7 +72,7 @@ public class Express {
 }
 ```
 表达式提供4个public方法，其中有一个是构造函数，另一个是打印该表达式的方法，另外两个是获得表达式信息的。
-###3.表达式类型
+### 3.表达式类型
 表达式类型由一个枚举体来进行描述：
 ```java
 enum ExpressType{
@@ -106,7 +106,7 @@ enum ExpressType{
 * BEGIN；		begin表达式，未实现。
 * APPLICATION;	组合式，需要使用apply进行应用。
 
-##四、eval-apply基本循环的实现
+## 四、eval-apply基本循环的实现
 <p align="center">
   <img src="https://raw.githubusercontent.com/lsj9383/LispJava/master/icon/eval-apply.png?raw=true" alt="SICP"/>
 </p>
@@ -114,7 +114,7 @@ eval和apply是元语言与新语言之间的接口.即，将新语言的表达�
 简单说来，lisp的求值模型是：<br>
 1).求值一个表达式，若该表达式为复合式，首先求值子表达式，而后将运算符作用到子表达式的值上。-----eval<br>
 2).当一个符合过程应用于一集实际参数时，我们在一个新的环境里求值这个过程。-----apply<br>
-###1.eval
+### 1.eval
 在eval中，描述了新语言的所有表达式与求值方式。其输入是一个新表达式和表达式所处的环境。注意，新表达式通常是一集字符串。
 ```java
 static Data Eval(Express exp, Environment env){
@@ -132,7 +132,7 @@ static Data Eval(Express exp, Environment env){
 	}
 }
 ```
-###2.apply
+### 2.apply
 apply描述了一个过程如何作用。<br>
 1).对于基本过程，其实现方式已经由`元语言`在底层实现。<br>
 2).对于复合过程，其实现方式是将`<body>`提取出来，并根据输入参数创建新环境，再对这个`<body>`进行求值。`<body>`通常是一组表达式。
@@ -154,9 +154,9 @@ public static Data Eval(Express exp, Environment env){
 	}
 }
 ```
-###3.另外
+### 3.另外
 Data, 数据类型，是Scheme中所用到的所有数据类型的总和。是实现解释性语言的类型无关的关键。<br>
-##四、基本过程
+## 四、基本过程
 基本过程`primitive procedure`, 是由`元语言`java底层所提供的计算以及相关数据结构，所有的复合过程最后都会转换为基本过程的执行，对复合过程的求值本质上就是试图提取内部的基本过程。<br>
 基本过程的实现方案：<br>
 1.数据类型：<br>
@@ -205,19 +205,19 @@ class Opera extends Data implements Primitive{
 * SaveImage		: save-image	数值，将图像保存到指定路径.
 * DisplayImage	: display-image	数值，另开线程显示图像.
 
-###图像基本过程
+### 图像基本过程
 liva有自己的图像实现框架，有自己特定的图像保存格式。
-####图像基本过程的使用
+#### 图像基本过程的使用
 	加载图像(load-image (quoted file-path))
 	保存图像(save-image image (quoted file-path))
 	显示图像(display-image image)
 	
-####图像数据格式
+#### 图像数据格式
 
-###文件基本过程
+### 文件基本过程
 
-##五、数据类型
-###1.lisp所有数据的种类
+## 五、数据类型
+### 1.lisp所有数据的种类
 * NULL,      无数据
 * NUMBER,    数值类书籍(暂时均用double)
 * BOOLEAN,   true or false
@@ -240,7 +240,7 @@ enum DataType{
 	PROCEDURE
 }
 ```
-###2.抽象数据类
+### 2.抽象数据类
 这是所有数据类的父类，它其中的type数据标志了数据具体类型，并且这个数据类型将在构造体中进行设置。
 ```java
 /* 抽象数据类 */
@@ -253,7 +253,7 @@ abstract public class Data {
 }
 ```
 
-##六、初始全局环境
+## 六、初始全局环境
 通过Interpreter的静态初始化，来进行加载。由于一个工程里面，最多只能有一个Interpreter类，因此该初始化使用的是静态初始化。
 ```java
 private static Frame InitialFrame = null;
